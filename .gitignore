@@ -1,2 +1,15 @@
-*.class
-*.log
+target/
+project/project
+local.properties
+
+*.iml
+.gradle
+.idea/workspace.xml
+.idea/libraries
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+
+## 由ide自动生成，应该删掉。自定义的应该重新取个名字。 ##
+proguard-sbt.txt
