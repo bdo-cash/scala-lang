@@ -1,2 +1,2 @@
 # scala-lang
-My own Scala librarys.
+Scala assist library.
