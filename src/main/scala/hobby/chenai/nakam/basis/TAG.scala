@@ -30,7 +30,7 @@ object TAG {
 
     override protected val align = A.RIGHT
 
-    override protected def original = tag
+    override protected val original = tag
 
     override def toString = trim
   }

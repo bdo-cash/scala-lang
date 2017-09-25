@@ -16,15 +16,18 @@
 
 package hobby.chenai.nakam.util
 
+import hobby.chenai.nakam.lang.J2S._
+import hobby.chenai.nakam.util.Cuttable._
+
 /**
   * @author Chenai Nakam(chenai.nakam@gmail.com)
   * @version 1.0, 22/09/2017
   */
 object Filler {
-  import Cuttable._
-
   def fillStr2Len(count: Int, elem: String, limit: Int, cutLeftTrueRightFalse: Boolean): String = {
     require(limit >= count)
+    require(elem.nonNull)
+    require(elem.nonEmpty)
     val s = fill(count / elem.length + (if (count % elem.length == 0) 0 else 1), elem).mkString
     assert(s.length >= count)
     s.cut(limit, cutLeftTrueRightFalse)
