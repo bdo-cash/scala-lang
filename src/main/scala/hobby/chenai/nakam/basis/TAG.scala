@@ -22,8 +22,8 @@ package hobby.chenai.nakam.basis
   */
 object TAG {
   implicit class LogTag(tag: String) extends RuledString {
-    override protected val minSize = 6
-    override protected val maxSize = 22
+    override protected lazy val minSize = leadWith.length + 5
+    override protected lazy val maxSize = 22
 
     override protected val leadWith = "@|"
     override protected val fillWith = "~"
@@ -35,8 +35,14 @@ object TAG {
     override def toString = trim
   }
 
+  implicit class ThrowMsg(_tag: String) extends LogTag(_tag: String) {
+    override protected lazy val maxSize = 1000
+
+    def tag = toString
+  }
+
   trait ClassName {
-    implicit lazy val className: LogTag = getClass.getName
+    implicit lazy val className: LogTag = LogTag(getClass.getName)
   }
 
   // TODO:  需要通过宏来实现。
