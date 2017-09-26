@@ -16,6 +16,8 @@
 
 package hobby.chenai.nakam.lang
 
+import java.util
+
 /**
   * @author Chenai Nakam(chenai.nakam@gmail.com)
   * @version 1.0, 23/09/2017
@@ -80,5 +82,21 @@ object J2S {
     @inline def nonNull: Boolean = ref ne null
 
     @inline def isNull: Boolean = ref eq null
+  }
+
+  implicit class Enumeration[A](e: util.Enumeration[A]) {
+    def toSeq: Seq[A] = {
+      val list = Nil
+      while (e.hasMoreElements) e.nextElement() :: list
+      list.reverse
+    }
+  }
+
+  implicit class Iterator[A](e: util.Iterator[A]) {
+    def toSeq: Seq[A] = {
+      val list = Nil
+      while (e.hasNext) e.next() :: list
+      list.reverse
+    }
   }
 }
