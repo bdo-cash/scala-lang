@@ -84,7 +84,7 @@ object J2S {
     @inline def isNull: Boolean = ref eq null
   }
 
-  implicit class Enumeration[A](e: util.Enumeration[A]) {
+  implicit class WrapEnumeration[A](e: util.Enumeration[A]) {
     def toSeq: Seq[A] = {
       val list = Nil
       while (e.hasMoreElements) e.nextElement() :: list
@@ -92,7 +92,7 @@ object J2S {
     }
   }
 
-  implicit class Iterator[A](e: util.Iterator[A]) {
+  implicit class WrapIterator[A](e: util.Iterator[A]) {
     def toSeq: Seq[A] = {
       val list = Nil
       while (e.hasNext) e.next() :: list
