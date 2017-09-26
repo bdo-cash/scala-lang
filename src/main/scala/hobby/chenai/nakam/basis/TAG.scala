@@ -21,6 +21,14 @@ package hobby.chenai.nakam.basis
   * @version 1.0, 21/09/2017
   */
 object TAG {
+  /**
+    * 用于日志输出时的参数，e.g:
+    * {{{
+    *   LOG.e("some msg", exception, args list)(logTag)
+    * }}}
+    * 通常，logTag 可通过隐式转换来省略，隐式转换的通常通过在类后面接入
+    * `with ClassName/MethodName` 的方式引入。
+    */
   implicit class LogTag(tag: String) extends RuledString {
     override protected lazy val minSize = leadWith.length + 5
     override protected lazy val maxSize = 22
@@ -35,12 +43,18 @@ object TAG {
     override def toString = trim
   }
 
+  /** 用于在异常信息中增加前缀，以便于在日志中搜索。e.g:
+    * {{{
+    *   new IllegalArgumentException("some msg".tag)
+    * }}}
+    */
   implicit class ThrowMsg(_tag: String) extends LogTag(_tag: String) {
     override protected lazy val maxSize = 1000
 
     def tag = toString
   }
 
+  /** 接入到类后面以便引入 `LogTag`。 */
   trait ClassName {
     implicit lazy val className: LogTag = LogTag(getClass.getName)
   }
