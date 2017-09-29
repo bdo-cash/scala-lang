@@ -29,7 +29,7 @@ object IO {
       if (in.nonNull) try {
         in.close()
       } catch {
-        case IOException => _
+        case _: IOException => Unit
       }
     }
   }
@@ -40,7 +40,7 @@ object IO {
       if (out.nonNull) try {
         out.close()
       } catch {
-        case IOException => _
+        case _: IOException => Unit
       }
     }
 
@@ -48,7 +48,7 @@ object IO {
       if (out.nonNull) try {
         out.flush()
       } catch {
-        case IOException => _
+        case _: IOException => Unit
       }
       this
     }
@@ -59,9 +59,9 @@ object IO {
           try {
             fo.getFD.sync()
           } catch {
-            case SyncFailedException => _
+            case _: SyncFailedException => Unit
           }
-        case _ => _
+        case _ => Unit
       }
       this
     }
