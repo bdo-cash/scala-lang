@@ -99,4 +99,13 @@ object J2S {
       list.reverse
     }
   }
+
+  implicit class Ifable[A](any: A) {
+    def ifAble[R](f: (A => (Boolean, R))*): R = {
+      val t = f.head(any)
+      if (t._1) t._2
+      else if (f.isEmpty) throw new IllegalArgumentException("所有条件都不适用")
+      else ifAble(f.tail: _*)
+    }
+  }
 }
