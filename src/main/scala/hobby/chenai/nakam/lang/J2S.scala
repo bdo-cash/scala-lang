@@ -101,11 +101,20 @@ object J2S {
   }
 
   implicit class Ifable[A](any: A) {
-    def ifAble[R](f: (A => (Boolean, R))*): R = {
-      val t = f.head(any)
-      if (t._1) t._2
-      else if (f.isEmpty) throw new IllegalArgumentException("所有条件都不适用")
-      else ifAble(f.tail: _*)
+    /**
+      * 对某值 `any` 的系列条件判断可以集中用这个函数表示，避免写一堆 `if...else...`。
+      *
+      * @param defValue 如果 `any` 不满足任何条件，则观察本默认值；如果默认值有定义，则返回该值，否则抛异常。
+      * @param f        条件和结果集合。
+      * @tparam R 返回值类型。
+      */
+    def ifAble[R](defValue: Option[R], f: (A => (Boolean, R))*): R = {
+      if (f.isEmpty) if (defValue.isDefined) defValue.get else throw new IllegalArgumentException("没有符合条件的结果。")
+      else {
+        val t = f.head(any)
+        if (t._1) t._2
+        else ifAble(defValue, f.tail: _*)
+      }
     }
   }
 }
