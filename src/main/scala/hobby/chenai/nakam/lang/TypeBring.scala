@@ -16,6 +16,8 @@
 
 package hobby.chenai.nakam.lang
 
+import scala.language.implicitConversions
+
 /**
   * 主要用于路径依赖类型的转换。特别针对同时存在参数化类型的情况，仅有
   * 一种方式将某对象转换到目标泛型[T]：
