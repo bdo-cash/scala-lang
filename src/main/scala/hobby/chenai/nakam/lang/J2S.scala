@@ -17,6 +17,7 @@
 package hobby.chenai.nakam.lang
 
 import java.util
+import scala.util.control.Breaks.{break, breakable}
 
 /**
   * @author Chenai Nakam(chenai.nakam@gmail.com)
@@ -115,6 +116,25 @@ object J2S {
         if (t._1) t._2
         else ifAble(defValue, f.tail: _*)
       }
+    }
+  }
+
+  implicit class NearBy(sizes: Array[Int]) {
+    def nearby(n: Int) = {
+      var p = 0
+      breakable {
+        for (s <- sizes.sorted) {
+          if (s == n) {
+            p = n
+            break
+          } else if (s > n) {
+            p = if (p <= 0) s else if ((n - p).abs >= (s - n).abs) s else p
+            break
+          }
+          p = s
+        }
+      }
+      p
     }
   }
 }
