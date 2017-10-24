@@ -28,6 +28,8 @@ object TAG {
     * }}}
     * 通常，logTag 可通过隐式转换来省略，隐式转换的通常通过在类后面接入
     * `with ClassName/MethodName` 的方式引入。
+    * <p>
+    * 注意：针对于 Android Log API, 如果 tag 包含了`非单字节`字符， 仍然会触发超过23字符的异常。
     */
   implicit class LogTag(tag: String) extends RuledString {
     override protected lazy val minSize = leadWith.length + 5
@@ -51,6 +53,13 @@ object TAG {
   implicit class ThrowMsg(_tag: String) extends LogTag(_tag: String) {
     override protected lazy val maxSize = 1000
 
+    def tag = toString
+  }
+
+  /**
+    * 用于将消息变短。
+    */
+  implicit class ShortMsg(_tag: String) extends LogTag(_tag: String) {
     def tag = toString
   }
 
