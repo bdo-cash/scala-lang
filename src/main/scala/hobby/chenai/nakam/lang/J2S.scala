@@ -17,6 +17,7 @@
 package hobby.chenai.nakam.lang
 
 import java.util
+
 import scala.util.control.Breaks.{break, breakable}
 
 /**
@@ -87,16 +88,16 @@ object J2S {
 
   implicit class WrapEnumeration[A](e: util.Enumeration[A]) {
     def toSeq: Seq[A] = {
-      val list = Nil
-      while (e.hasMoreElements) e.nextElement() :: list
+      var list: List[A] = Nil
+      while (e.hasMoreElements) list = e.nextElement() :: list
       list.reverse
     }
   }
 
   implicit class WrapIterator[A](e: util.Iterator[A]) {
     def toSeq: Seq[A] = {
-      val list = Nil
-      while (e.hasNext) e.next() :: list
+      var list: List[A] = Nil
+      while (e.hasNext) list = e.next() :: list
       list.reverse
     }
   }
