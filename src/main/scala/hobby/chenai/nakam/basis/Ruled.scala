@@ -85,6 +85,8 @@ trait RuledString extends Ruled[String] {
   }
 
   override def canEqual(that: Any) = that.isInstanceOf[RuledString]
+
+  override def hashCode() = trim.hashCode
 }
 
 trait RuledSeq[E] extends Ruled[Seq[E]] with TypeBring[Seq[E], Seq[E], Seq[_]] {
