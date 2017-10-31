@@ -89,7 +89,7 @@ object J2S {
   implicit class WrapEnumeration[A](e: util.Enumeration[A]) {
     def toSeq: Seq[A] = {
       var list: List[A] = Nil
-      while (e.hasMoreElements) list = e.nextElement() :: list
+      while (e.hasMoreElements) list ::= e.nextElement()
       list.reverse
     }
   }
@@ -97,7 +97,7 @@ object J2S {
   implicit class WrapIterator[A](e: util.Iterator[A]) {
     def toSeq: Seq[A] = {
       var list: List[A] = Nil
-      while (e.hasNext) list = e.next() :: list
+      while (e.hasNext) list ::= e.next()
       list.reverse
     }
   }
