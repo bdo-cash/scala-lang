@@ -63,10 +63,14 @@ object J2S {
     */
   implicit class NonFlat(val seq: Seq[_]) {
     def nonFlat: NonFlat = this
+
+    def mkString$ = seq.mkString("(", ", ", ")")
   }
 
   implicit class NonFlat$(val arr: Array[_]) {
     def nonFlat: NonFlat$ = this
+
+    def mkString$ = arr.mkString("(", ", ", ")")
   }
 
   // 4 Java
