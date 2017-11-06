@@ -18,6 +18,7 @@ package hobby.chenai.nakam.lang
 
 import java.util
 
+import scala.collection.immutable.NumericRange
 import scala.util.control.Breaks.{break, breakable}
 
 /**
@@ -140,6 +141,74 @@ object J2S {
         }
       }
       p
+    }
+  }
+
+  implicit class WrapNumericRange[A](range: NumericRange[A]) {
+    def containsAnyOf(seq: Seq[A]) = {
+      var contains = false
+      breakable {
+        seq.foreach { e =>
+          if (range contains e) {
+            contains = true
+            break
+          }
+        }
+      }
+      contains
+    }
+  }
+
+  implicit class WrapRange(range: Range) {
+    def containsAnyOf(seq: Seq[Int]) = {
+      var contains = false
+      breakable {
+        seq.foreach { e =>
+          if (range contains e) {
+            contains = true
+            break
+          }
+        }
+      }
+      contains
+    }
+  }
+
+  implicit class WrapSequence[A](list: Seq[A]) {
+    def containsAnyOf(seq: Seq[A]) = {
+      var contains = false
+      breakable {
+        seq.foreach { e =>
+          if (list contains e) {
+            contains = true
+            break
+          }
+        }
+      }
+      contains
+    }
+  }
+
+  implicit class WrapChars(seq: Seq[Char]) {
+    /**
+      * @return 包含在等差递增/减数列中的字符的个数。
+      */
+    def ladderCount = {
+      var prev = seq.head
+      var delta = Int.MaxValue
+      var count = 0
+      var amass = 2
+      seq.tail.foreach { c =>
+        if (c - prev == delta) {
+          count += amass
+          amass = 1
+        } else {
+          delta = c - prev
+          if (amass < 3) amass += 1
+        }
+        prev = c
+      }
+      count
     }
   }
 }
