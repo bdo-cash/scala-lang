@@ -16,6 +16,8 @@
 
 package hobby.chenai.nakam.lang
 
+import hobby.chenai.nakam.lang.TypeBring.AsIs
+
 import scala.language.implicitConversions
 
 /**
@@ -32,7 +34,7 @@ import scala.language.implicitConversions
   * @version 1.0, 16/07/2017
   */
 trait TypeBring[L, U >: L, -O] {
-  implicit def ^[T >: L <: U](o: O): T = o.asInstanceOf[T]
+  implicit def ^[T >: L <: U](o: O): T = o.as[T]
 
   def ^#(c: O, u: O)(implicit f: (U, L) => U): U = f(c, u)
 
@@ -40,6 +42,14 @@ trait TypeBring[L, U >: L, -O] {
     * 的方式引入本作用范围，隐式方法 `^(O)` 不会被直接应用（原因不详），
     * 只有这样显示定义隐式函数才能起作用。 */
   implicit lazy val t2 = ^ _
+}
+
+object TypeBring {
+  implicit class AsIs(a: Any) {
+    def as[T]: T = a.asInstanceOf[T]
+
+    def is[T]: Boolean = a.isInstanceOf[T]
+  }
 }
 
 //    class TypeTo[T >: UNIT <: COIN] extends (AbsCoinGroup#AbsCoin => T) {
