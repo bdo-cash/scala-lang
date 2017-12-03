@@ -202,7 +202,7 @@ object J2S {
       var amass = 2
       var b = false
       seq.tail.foreach { c =>
-        if (c - prev == delta) {
+        if (delta != 0 && c - prev == delta) {
           count += amass
           amass = 1
           if (b) {
