@@ -191,24 +191,40 @@ object J2S {
 
   implicit class WrapChars(seq: Seq[Char]) {
     /**
-      * @return 包含在等差递增/减数列中的字符的个数。
+      * @param adjacent 是否包括相邻的。
+      * @return （包含在等差数列中的字符的个数， 有几个数列）。
       */
-    def ladderCount = {
+    def ladderCount(adjacent: Boolean = true) = {
       var prev = seq.head
       var delta = Int.MaxValue
       var count = 0
+      var repeat = 0
       var amass = 2
+      var b = false
       seq.tail.foreach { c =>
         if (c - prev == delta) {
           count += amass
           amass = 1
+          if (b) {
+            repeat += 1
+            b = false
+          }
         } else {
+          if (adjacent && b && amass > 1 && delta.abs == 1) {
+            count += amass - 1
+            repeat += 1
+          }
           delta = c - prev
           if (amass < 3) amass += 1
+          b = true
         }
         prev = c
       }
-      count
+      if (adjacent && b && delta.abs == 1) {
+        count += amass - 1
+        repeat += 1
+      }
+      (count, repeat)
     }
   }
 }
