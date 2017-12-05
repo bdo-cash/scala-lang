@@ -48,7 +48,8 @@ object TypeBring {
   implicit class AsIs(a: Any) {
     def as[T]: T = a.asInstanceOf[T]
 
-    def is[T]: Boolean = a.isInstanceOf[T]
+    // 大坑：这个永远返回 true。
+    // def is[T]: Boolean = a.isInstanceOf[T]
   }
 }
 
