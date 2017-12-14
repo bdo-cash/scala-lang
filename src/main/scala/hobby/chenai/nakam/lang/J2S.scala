@@ -192,39 +192,54 @@ object J2S {
   implicit class WrapChars(seq: Seq[Char]) {
     /**
       * @param adjacent 是否包括相邻的。
-      * @return （包含在等差数列中的字符的个数， 有几个数列）。
+      * @return （包含在等差数列中的字符的个数， 有几个数列，平均差）。
       */
     def ladderCount(adjacent: Boolean = true) = {
-      var prev = seq.head
-      var delta = Int.MaxValue
-      var count = 0
-      var repeat = 0
-      var amass = 2
-      var b = false
-      seq.tail.foreach { c =>
-        if (delta != 0 && c - prev == delta) {
-          count += amass
-          amass = 1
-          if (b) {
-            repeat += 1
-            b = false
+      if (seq.length < 2) (0, 0, 0f)
+      else {
+        var prev = seq.head
+        var delta = Int.MaxValue
+        var count, repeat = 0
+        var amass = 2
+        var sum, sumCount = 0
+        var b = true
+        seq.tail.foreach { c =>
+          if (delta != 0 && c - prev == delta) {
+            count += amass
+            if (b) {
+              repeat += 1
+              val i = amass min 2
+              sumCount += i
+              sum += (delta.abs * i)
+              b = false
+            } else {
+              sumCount += amass
+              sum += (delta.abs * amass)
+            }
+            amass = 1
+          } else {
+            if (adjacent && b && delta.abs == 1) {
+              count += amass - 1
+              repeat += 1
+              sumCount += 1
+              sum += 1
+              amass = 1
+            }
+            if (amass < 3) amass += 1
+            b = true
+            delta = c - prev
           }
-        } else {
-          if (adjacent && b && amass > 1 && delta.abs == 1) {
-            count += amass - 1
-            repeat += 1
-          }
-          delta = c - prev
-          if (amass < 3) amass += 1
-          b = true
+          prev = c
         }
-        prev = c
+        if (adjacent && b && delta.abs == 1) {
+          count += amass - 1
+          repeat += 1
+          sumCount += 1
+          sum += 1
+          amass = 1
+        }
+        (count, repeat, if (sumCount == 0) 0 else sum * 1f / sumCount)
       }
-      if (adjacent && b && delta.abs == 1) {
-        count += amass - 1
-        repeat += 1
-      }
-      (count, repeat)
     }
   }
 }
