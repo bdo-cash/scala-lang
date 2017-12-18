@@ -97,11 +97,13 @@ object J2S {
   }
 
   implicit class WrapIterator[A](e: util.Iterator[A]) {
-    def toSeq: Seq[A] = {
+    def toSeq: Seq[A] = scala.collection.convert.WrapAsScala.asScalaIterator(e).toSeq
+
+    /*{
       var list: List[A] = Nil
       while (e.hasNext) list ::= e.next()
       list.reverse
-    }
+    }*/
   }
 
   implicit class Ifable[A](any: A) {
