@@ -124,13 +124,14 @@ object J2S {
     }
   }
 
-  // 这里不可以是传名参数，否则会出现奇葩的问题。
+  // 这里不可以是传名参数，否则会出现奇葩的问题：函数体里面的`最后一句`调用会被应用隐式转换，而不是整个方法体。
   // 但即使是个函数，也一样出现其他的奇葩情况（相关代码不执行）。
-  /*implicit def runnable(f: () => Unit): Runnable = new Runnable {
+  /*implicit def runnable(f: () => Any): Runnable = new Runnable {
     override def run(): Unit = f
   }*/
 
-  implicit class Run(f: => Unit) {
+  /** 注意返回类型是`Any`，否则会出现对于最后一句是java调用返回void, 却编译不过的情况。 */
+  implicit class Run(f: => Any) {
     // runnable(f) 不要去这样调用，会导致求值。
     def run$: Runnable = new Runnable {
       override def run(): Unit = f
