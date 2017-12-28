@@ -16,14 +16,26 @@
 
 package hobby.chenai.nakam.basis
 
-import hobby.chenai.nakam.lang.J2S.NonNull
 import java.io._
+import hobby.chenai.nakam.lang.J2S.NonNull
 
 /**
   * @author Chenai Nakam(chenai.nakam@gmail.com)
   * @version 1.0, 28/09/2017
   */
 object IO {
+  implicit class Close$(io: AutoCloseable) {
+    def close$(): Unit = io match {
+      case in: InputStream => in.close$()
+      case out: OutputStream => out.close$()
+      case _ => if (io.nonNull) try {
+        io.close()
+      } catch {
+        case _: IOException => Unit
+      }
+    }
+  }
+
   implicit class CloseIn(in: InputStream) {
     def close$(): Unit = {
       if (in.nonNull) try {
