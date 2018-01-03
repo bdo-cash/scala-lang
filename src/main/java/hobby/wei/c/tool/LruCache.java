@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package hobby.wei.c.tools;
+package hobby.wei.c.tool;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

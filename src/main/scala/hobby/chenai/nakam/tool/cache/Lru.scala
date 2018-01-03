@@ -16,7 +16,7 @@
 
 package hobby.chenai.nakam.tool.cache
 
-import hobby.wei.c.tools.LruCache
+import hobby.wei.c.tool.LruCache
 
 /**
   * @author Chenai Nakam(chenai.nakam@gmail.com)
