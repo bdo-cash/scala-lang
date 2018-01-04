@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * {@link AbsThrottle Throttle}中正在执行任务的计数器。
  *
- * @author Wei.Chou(weichou2010@gmail.com)
+ * @author Wei Chou(weichou2010@gmail.com)
  * @version 1.0, 18/08/2016
  */
 public class Counter {

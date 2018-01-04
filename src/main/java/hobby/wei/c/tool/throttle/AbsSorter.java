@@ -25,7 +25,7 @@ import java.util.TreeSet;
 /**
  * 离散对象分拣器(去重复、排序等)。输入数据需满足接口{@link Discrete}的基本要求。
  *
- * @author Wei.Chou(weichou2010@gmail.com)
+ * @author Wei Chou(weichou2010@gmail.com)
  * @version 1.0, 15/08/2016
  */
 abstract class AbsSorter<D extends Discrete<D>, R extends AbsSorter.AbsR<D>> {

@@ -48,7 +48,7 @@ import static scala.Predef.require;
  * 最大限度}相区别，这里也直接把最大允许同时运行请求数作为满载队列的最大限度)，则会被挤出并{@link
  * AbsExecutor#cancel$(AbsSorter.AbsR, TAG) cancel}.
  *
- * @author Wei.Chou(weichou2010@gmail.com)
+ * @author Wei Chou(weichou2010@gmail.com)
  * @version 1.0, 17/08/2016, 创建;
  * 1.1, 21/02/2017, 增加tag参数;
  * 2.0, 24/02/2017, 重构I/O规则。

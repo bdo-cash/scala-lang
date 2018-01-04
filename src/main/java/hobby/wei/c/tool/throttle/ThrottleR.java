@@ -21,7 +21,7 @@ package hobby.wei.c.tool.throttle;
  * <p>
  * 更多细节，见{@link AbsThrottle}.
  *
- * @author Wei.Chou(weichou2010@gmail.com)
+ * @author Wei Chou(weichou2010@gmail.com)
  * @version 1.0, 18/08/2016, 创建;
  *          1.1, 21/02/2017, 增加tag参数;
  *          2.0, 24/02/2017, 重构I/O规则。

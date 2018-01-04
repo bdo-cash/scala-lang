@@ -19,7 +19,7 @@ package hobby.wei.c.tool.throttle;
 import static scala.Predef.require;
 
 /**
- * @author Wei.Chou(weichou2010@gmail.com)
+ * @author Wei Chou(weichou2010@gmail.com)
  * @version 1.0, 17/08/2016
  */
 public final class Range<D extends Discrete<D>> extends AbsSorter.AbsR<D> {

@@ -20,7 +20,7 @@ package hobby.wei.c.tool.throttle;
  * 离散数据需满足的基本能力。
  *
  * @param <T> 强制要求T类型与当前对象类型相同。
- * @author Wei.Chou(weichou2010@gmail.com)
+ * @author Wei Chou(weichou2010@gmail.com)
  * @version 1.0, 17/08/2016
  */
 public interface Discrete<T extends Discrete<T>> {

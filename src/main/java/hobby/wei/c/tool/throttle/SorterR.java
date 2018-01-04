@@ -21,7 +21,7 @@ import java.util.SortedSet;
 /**
  * 离散对象或{@link Range}分拣器(去重复、排序等)。输入数据需满足接口{@link Discrete}的基本要求。
  *
- * @author Wei.Chou(weichou2010@gmail.com)
+ * @author Wei Chou(weichou2010@gmail.com)
  * @version 1.0, 15/08/2016
  */
 public class SorterR<D extends Discrete<D>> extends AbsSorter<D, Range<D>> {

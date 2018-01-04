@@ -28,7 +28,7 @@ import static scala.Predef.require;
 /**
  * 离散对象分拣器(去重复、排序等)。输入数据可以是任意对象。
  *
- * @author Wei.Chou(weichou2010@gmail.com)
+ * @author Wei Chou(weichou2010@gmail.com)
  * @version 1.0, 15/08/2016
  */
 public class SorterO<O> extends AbsSorter<Linkless<O>, Rs<O>> {
