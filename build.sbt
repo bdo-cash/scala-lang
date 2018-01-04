@@ -6,7 +6,7 @@ version := "0.0.1-SNAPSHOT"
 
 scalaVersion := "2.11.7"
 
-libraryProject := true
+//libraryProject := true
 
 exportJars := true
 
@@ -16,4 +16,4 @@ exportJars := true
 // 这句在这里会导致编译报错 scala.reflect.internal.MissingRequirementError: object scala in compiler mirror not found.
 //autoScalaLibrary := false
 
-proguardVersion := "5.2.1" // 必须高于 5.1，见 https://github.com/scala-android/sbt-android。
+//proguardVersion := "5.2.1" // 必须高于 5.1，见 https://github.com/scala-android/sbt-android。
