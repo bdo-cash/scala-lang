@@ -18,6 +18,7 @@ package hobby.wei.c.log
 
 import hobby.chenai.nakam.basis.TAG._
 import hobby.chenai.nakam.lang.J2S._
+import hobby.chenai.nakam.tool.pool.S
 import hobby.wei.c.anno.proguard.Burden
 
 /**
@@ -36,6 +37,15 @@ abstract class Logger {
     }
   }
 
+  private def recycleArgs(args: Any*): Unit = {
+    for (o <- args) {
+      o match {
+        case s: S => s.recycle()
+        case _ =>
+      }
+    }
+  }
+
   @Burden
   def v(s: => String, args: Any*)(implicit tag: LogTag): Unit = v(null.asInstanceOf[Throwable], s, args)
 
@@ -44,6 +54,7 @@ abstract class Logger {
     val flats = args.flatten$
     checkArgs(flats: _*) // 放在外面接受检查，等release的时候会被直接删除。
     logv(tag, e, s, flats: _*)
+    recycleArgs(flats: _*)
   }
 
   protected def logv(tag: LogTag, e: Throwable, s: => String, args: Any*)
@@ -59,6 +70,7 @@ abstract class Logger {
     val flats = args.flatten$
     checkArgs(flats: _*)
     logd(tag, e, s, flats: _*)
+    recycleArgs(flats: _*)
   }
 
   protected def logd(tag: LogTag, e: Throwable, s: => String, args: Any*)
@@ -74,6 +86,7 @@ abstract class Logger {
     val flats = args.flatten$
     checkArgs(flats: _*)
     logi(tag, e, s, flats: _*)
+    recycleArgs(flats: _*)
   }
 
   protected def logi(tag: LogTag, e: Throwable, s: => String, args: Any*)
@@ -89,6 +102,7 @@ abstract class Logger {
     val flats = args.flatten$
     checkArgs(flats: _*)
     logw(tag, e, s, flats: _*)
+    recycleArgs(flats: _*)
   }
 
   protected def logw(tag: LogTag, e: Throwable, s: => String, args: Any*)
@@ -102,6 +116,7 @@ abstract class Logger {
     val flats = args.flatten$
     checkArgs(flats: _*)
     loge(tag, e, s, flats: _*)
+    recycleArgs(flats: _*)
   }
 
   protected def loge(tag: LogTag, e: Throwable, s: => String, args: Any*)
