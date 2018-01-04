@@ -17,7 +17,7 @@
 package hobby.chenai.nakam.tool.pool
 
 /**
-  * @author Chenakam (chenai.nakam@gmail.com)
+  * @author Chenai Nakam(chenai.nakam@gmail.com)
   * @version 1.0, 05/01/2018
   */
 class S extends Cap[String] {
