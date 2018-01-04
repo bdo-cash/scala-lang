@@ -24,7 +24,7 @@ import java.util.Map;
  * 原版的LruCache有个bug(Android 5.0, API Level 21), 所以这里copy一份。
  * 详见<a href="http://my.oschina.net/weichou/blog/735370">我的博客</a>
  *
- * @author Wei.Chou
+ * @author Wei.Chou(weichou2010@gmail.com)
  * @version 1.0, 22/08/2016
  */
 
