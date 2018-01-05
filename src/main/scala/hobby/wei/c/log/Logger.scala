@@ -16,6 +16,7 @@
 
 package hobby.wei.c.log
 
+import java.util.Date
 import hobby.chenai.nakam.basis.TAG._
 import hobby.chenai.nakam.lang.J2S._
 import hobby.chenai.nakam.tool.pool.S
@@ -25,7 +26,7 @@ import hobby.wei.c.anno.proguard.Burden
   * @author Chenai Nakam(chenai.nakam@gmail.com)
   * @version 1.0, 05/01/2018
   */
-abstract class Logger {
+class Logger {
   @Burden
   @throws[IllegalArgumentException]
   private def checkArgs(args: Any*): Unit = {
@@ -57,8 +58,6 @@ abstract class Logger {
     recycleArgs(flats: _*)
   }
 
-  protected def logv(tag: LogTag, e: Throwable, s: => String, args: Any*)
-
   @Burden
   def v(e: Throwable)(implicit tag: LogTag): Unit = v(e, null)
 
@@ -72,8 +71,6 @@ abstract class Logger {
     logd(tag, e, s, flats: _*)
     recycleArgs(flats: _*)
   }
-
-  protected def logd(tag: LogTag, e: Throwable, s: => String, args: Any*)
 
   @Burden
   def d(e: Throwable)(implicit tag: LogTag): Unit = d(e, null)
@@ -89,8 +86,6 @@ abstract class Logger {
     recycleArgs(flats: _*)
   }
 
-  protected def logi(tag: LogTag, e: Throwable, s: => String, args: Any*)
-
   @Burden
   def i(e: Throwable)(implicit tag: LogTag): Unit = i(e, null)
 
@@ -105,8 +100,6 @@ abstract class Logger {
     recycleArgs(flats: _*)
   }
 
-  protected def logw(tag: LogTag, e: Throwable, s: => String, args: Any*)
-
   @Burden
   def w(e: Throwable)(implicit tag: LogTag): Unit = w(e, null)
 
@@ -119,7 +112,34 @@ abstract class Logger {
     recycleArgs(flats: _*)
   }
 
-  protected def loge(tag: LogTag, e: Throwable, s: => String, args: Any*)
-
   def e(t: Throwable)(implicit tag: LogTag): Unit = e(t, null)
+
+  protected def logv(tag: LogTag, e: Throwable, s: => String, args: Any*): Unit = {
+    System.out.println(toMsg("V", tag, s, args: _*))
+    if (e.nonNull) e.printStackTrace(System.out)
+  }
+
+  protected def logd(tag: LogTag, e: Throwable, s: => String, args: Any*): Unit = {
+    System.out.println(toMsg("D", tag, s, args: _*))
+    if (e.nonNull) e.printStackTrace(System.out)
+  }
+
+  protected def logi(tag: LogTag, e: Throwable, s: => String, args: Any*): Unit = {
+    System.out.println(toMsg("I", tag, s, args: _*))
+    if (e.nonNull) e.printStackTrace(System.out)
+  }
+
+  protected def logw(tag: LogTag, e: Throwable, s: => String, args: Any*): Unit = {
+    System.out.println(toMsg("W", tag, s, args: _*))
+    if (e.nonNull) e.printStackTrace(System.out)
+  }
+
+  protected def loge(tag: LogTag, e: Throwable, s: => String, args: Any*): Unit = {
+    System.out.println(toMsg("E", tag, s, args: _*))
+    if (e.nonNull) e.printStackTrace(System.out)
+  }
+
+  private def toMsg(level: String, tag: LogTag, s: => String, args: Any*): String = {
+    new Date + s"<$level>[$tag]" + (if (args.isEmpty) String.valueOf(s) else s.format(args: _*))
+  }
 }

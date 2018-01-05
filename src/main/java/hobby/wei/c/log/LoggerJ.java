@@ -28,9 +28,12 @@ import scala.runtime.AbstractFunction0;
  */
 public class LoggerJ {
     // 直接引用 Scala 的已有实现。
-    private Logger logger;
+    private Logger logger = new Logger();
 
-    protected LoggerJ(Logger logger) {
+    public LoggerJ() {
+    }
+
+    public LoggerJ(Logger logger) {
         this.logger = logger;
     }
 
