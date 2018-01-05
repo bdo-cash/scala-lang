@@ -18,8 +18,9 @@ exportJars := true
 
 //proguardVersion := "5.2.1" // 必须高于 5.1，见 https://github.com/scala-android/sbt-android。
 
-resolvers += "jitpack" at "https://jitpack.io"
-
-libraryDependencies ++= Seq(
-  "com.github.dedge-space" % "Annoguard" % "1.0.3-beta"
-)
+// 如果要用 jitpack 打包的话就加上，打完了再注掉。
+//resolvers += "jitpack" at "https://jitpack.io"
+//
+//libraryDependencies ++= Seq(
+//  "com.github.dedge-space" % "Annoguard" % "1.0.3-beta"
+//)
