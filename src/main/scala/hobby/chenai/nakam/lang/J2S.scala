@@ -17,6 +17,7 @@
 package hobby.chenai.nakam.lang
 
 import java.util
+import hobby.chenai.nakam.lang.TypeBring.AsIs
 
 /**
   * @author Chenai Nakam(chenai.nakam@gmail.com)
@@ -82,10 +83,10 @@ object J2S {
     *   require(xxx.nonNull, "xxx不能为空")
     * }}}
     */
-  implicit class NonNull(ref: AnyRef) {
-    @inline def nonNull: Boolean = ref ne null
+  implicit class NonNull(ref: Any) {
+    @inline def nonNull: Boolean = ref.as[AnyRef] ne null
 
-    @inline def isNull: Boolean = ref eq null
+    @inline def isNull: Boolean = ref.as[AnyRef] eq null
   }
 
   implicit class WrapEnumeration[A](e: util.Enumeration[A]) {
