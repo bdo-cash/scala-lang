@@ -54,7 +54,7 @@ trait Pool[T, C <: Cap[T]] {
 
   @throws[InterruptedException]
   def recycle(o: Cap[T]): Unit = {
-    sPoolSync.lockInterruptibly()
+    sPoolSync.lock() // lockInterruptibly() 改为不可中断，否则一旦线程被设置了中断标记，日志都将无法输出。
     try
         if (sPoolSize < maxPoolSize) {
           o.next = sPool
