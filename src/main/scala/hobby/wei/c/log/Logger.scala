@@ -139,7 +139,7 @@ class Logger {
     if (e.nonNull) e.printStackTrace(System.out)
   }
 
-  private def toMsg(level: String, tag: LogTag, throws: Boolean, s: => String, args: Any*): String = {
-    new Date + s"<$level>[$tag]" + (if (args.isEmpty) String.valueOf(s) else s.format(args: _*)) + (if (throws) " | e >:" else "")
-  }
+  private def toMsg(level: String, tag: LogTag, throws: Boolean, s: => String, args: Any*): String =
+    new Date + s"<$level>[$tag]" + (if (args.isEmpty) String.valueOf(if (s.isNull) s + "." else s)
+    else s.format(args: _*)) + (if (throws) " | e >:" else "")
 }
