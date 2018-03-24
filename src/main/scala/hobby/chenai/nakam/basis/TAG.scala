@@ -65,7 +65,7 @@ object TAG {
 
   /** 接入到类后面以便引入 `LogTag`。 */
   trait ClassName {
-    implicit lazy val className: LogTag = LogTag(getClass.getName)
+    implicit lazy val className: LogTag = LogTag(getClass.getName + "@" + hashCode.toHexString.take(3))
   }
 
   // TODO:  需要通过宏来实现。
