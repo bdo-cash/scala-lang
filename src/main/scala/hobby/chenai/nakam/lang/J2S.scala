@@ -17,6 +17,7 @@
 package hobby.chenai.nakam.lang
 
 import java.util
+import java.util.concurrent.Future
 import hobby.chenai.nakam.lang.TypeBring.AsIs
 
 /**
@@ -137,5 +138,9 @@ object J2S {
     def run$: Runnable = new Runnable {
       override def run(): Unit = f
     }
+  }
+
+  implicit class Future2Scala[V](future: Future[V]) {
+    def toScala: scala.concurrent.Future[V] = scala.concurrent.Future(future.get)(scala.concurrent.ExecutionContext.global)
   }
 }
