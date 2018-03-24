@@ -20,6 +20,8 @@ import java.util
 import java.util.concurrent.Future
 import hobby.chenai.nakam.lang.TypeBring.AsIs
 
+import scala.language.implicitConversions
+
 /**
   * @author Chenai Nakam(chenai.nakam@gmail.com)
   * @version 1.0, 23/09/2017
@@ -140,7 +142,9 @@ object J2S {
     }
   }
 
+  implicit def toScala[V](future: Future[V]): concurrent.Future[V] = future.toScala
+
   implicit class Future2Scala[V](future: Future[V]) {
-    def toScala: scala.concurrent.Future[V] = scala.concurrent.Future(future.get)(scala.concurrent.ExecutionContext.global)
+    @inline def toScala: concurrent.Future[V] = concurrent.Future(future.get)(concurrent.ExecutionContext.global)
   }
 }
