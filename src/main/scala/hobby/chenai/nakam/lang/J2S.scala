@@ -147,4 +147,17 @@ object J2S {
   implicit class Future2Scala[V](future: Future[V]) {
     @inline def toScala: concurrent.Future[V] = concurrent.Future(future.get)(concurrent.ExecutionContext.global)
   }
+
+  /** 顺便做某事。类似`ensuring(cond: => Boolean)`，但不同：cond 会被放进断言，意味着可能不被执行。 */
+  implicit class Obiter(cond: Boolean) {
+    def obiter(codes: => Unit): Boolean = {
+      if (cond) codes
+      cond
+    }
+
+    def obiter(codes: Boolean => Unit): Boolean = {
+      codes(cond)
+      cond
+    }
+  }
 }
