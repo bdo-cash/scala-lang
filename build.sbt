@@ -22,5 +22,5 @@ exportJars := true
 //resolvers += "jitpack" at "https://jitpack.io"
 //
 //libraryDependencies ++= Seq(
-//  "com.github.dedge-space" % "Annoguard" % "1.0.3-beta"
+//  "com.github.dedge-space" % "annoguard" % "1.0.3-beta"
 //)
