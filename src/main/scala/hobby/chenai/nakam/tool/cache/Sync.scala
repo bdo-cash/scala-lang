@@ -16,6 +16,9 @@
 
 package hobby.chenai.nakam.tool.cache
 
+import java.util.concurrent.locks.ReentrantLock
+import hobby.wei.c.tool.Locker
+
 /**
   * 本实现将同步阻塞范围降低到最小。
   * <p>
@@ -26,13 +29,16 @@ package hobby.chenai.nakam.tool.cache
   * @version 1.0, 08/09/2017
   */
 trait Sync extends MemFunc {
-  override protected[cache] def <~(key: K) = synchronized(super.<~(key))
+  implicit lazy val lock: ReentrantLock = new ReentrantLock(true) // 公平锁，让put具有顺序性，以防旧值覆盖新值。
 
-  override protected[cache] def +(value: (K, Option[V])): Unit = synchronized(super.+(value))
+  import Locker.sync
+  override protected[cache] def <~(key: K) = sync(super.<~(key))
 
-  override protected[cache] def -(key: K): Unit = synchronized(super.-(key))
+  override protected[cache] def +(value: (K, Option[V])): Unit = sync(super.+(value))
 
-  override protected[cache] def :=(m: Map[K, Option[V]]): Unit = synchronized(super.:=(m))
+  override protected[cache] def -(key: K): Unit = sync(super.-(key))
 
-  override protected[cache] def ?(): Unit = synchronized(super.?())
+  override protected[cache] def :=(m: Map[K, Option[V]]): Unit = sync(super.:=(m))
+
+  override protected[cache] def ?(): Unit = sync(super.?())
 }

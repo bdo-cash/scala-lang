@@ -16,6 +16,8 @@
 
 package hobby.chenai.nakam.tool.cache
 
+import hobby.wei.c.tool.Locker
+
 /**
   * `get(K)` 等同于单例懒加载。本实现仅针对于首次加载内容非常耗时的操作有意义，即：
   * {{{ 不会让多数线程都去执行这个耗时加载操作。 }}}
@@ -27,6 +29,6 @@ package hobby.chenai.nakam.tool.cache
 trait LazyGet extends Sync {
   override def get(key: K) = memory.get(key) match {
     case some: Some[Option[V]] => some.get
-    case _ => synchronized(super.get(key))
+    case _ => Locker.sync(super.get(key))
   }
 }

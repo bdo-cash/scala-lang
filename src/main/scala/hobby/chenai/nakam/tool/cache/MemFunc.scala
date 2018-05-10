@@ -16,6 +16,9 @@
 
 package hobby.chenai.nakam.tool.cache
 
+import java.util.concurrent.locks.ReentrantLock
+import hobby.wei.c.tool.Locker
+
 /**
   * @author Chenai Nakam(chenai.nakam@gmail.com)
   * @version 1.0, 25/07/2017
@@ -73,14 +76,29 @@ protected trait MemStore[K, V] {
     *         是客户代码存入的 `原始数据`，这个 `原始数据` 是
     *         经过数据库操作后返回的，即：这里跟数据库保持一致。
     */
-  def get(key: K): Option[Option[V]]
+  def get(key: K): Option[Option[V]] = ???
 
   /**
     * @return 返回 `value` 本身。
     */
-  def put(key: K, value: Option[V]): Unit
+  def put(key: K, value: Option[V]): Unit = ???
 
-  def remove(key: K): Unit
+  def remove(key: K): Unit = ???
 
-  def clear(): Unit
+  def clear(): Unit = ???
+}
+
+object MemStore {
+  trait Sync[K, V] extends MemStore[K, V] {
+    implicit lazy val lock: ReentrantLock = new ReentrantLock(true) // 公平锁，让put具有顺序性，以防旧值覆盖新值。
+
+    import Locker.sync
+    override def get(key: K) = sync(super.get(key))
+
+    override def put(key: K, value: Option[V]): Unit = sync(super.put(key, value))
+
+    override def remove(key: K): Unit = sync(super.remove(key))
+
+    override def clear(): Unit = sync(super.clear())
+  }
 }

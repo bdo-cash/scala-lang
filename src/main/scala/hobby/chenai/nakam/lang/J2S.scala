@@ -21,6 +21,7 @@ import java.util.concurrent.Future
 import hobby.chenai.nakam.lang.TypeBring.AsIs
 
 import scala.language.implicitConversions
+import scala.ref.WeakReference
 
 /**
   * @author Chenai Nakam(chenai.nakam@gmail.com)
@@ -160,4 +161,6 @@ object J2S {
       cond
     }
   }
+
+  def getRef[T <: AnyRef](ref: WeakReference[T]): Option[T] = if (ref.isNull) None else ref.get
 }
