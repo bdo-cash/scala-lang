@@ -19,14 +19,12 @@ package hobby.wei.c.tool
 import hobby.chenai.nakam.basis.TAG
 import hobby.wei.c.log.Logger
 
-
 /**
   * @author Chenai Nakam(chenai.nakam@gmail.com)
   * @version 1.0, 12/06/2018
   */
-trait Retry extends TAG.ClassName {
+protected trait Retry extends TAG.ClassName {
   protected val logger: Logger
-
   import logger._
 
   /**

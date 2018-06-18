@@ -16,10 +16,9 @@
 
 package hobby.chenai.nakam.lang
 
+import hobby.chenai.nakam.lang.TypeBring.AsIs
 import java.util
 import java.util.concurrent.Future
-import hobby.chenai.nakam.lang.TypeBring.AsIs
-
 import scala.language.implicitConversions
 import scala.ref.WeakReference
 
@@ -138,12 +137,12 @@ object J2S {
   /** 注意返回类型是`Any`，否则会出现对于最后一句是java调用返回void, 却编译不过的情况。 */
   implicit class Run(f: => Any) {
     // runnable(f) 不要去这样调用，会导致求值。
-    def run$: Runnable = new Runnable {
+    @inline def run$: Runnable = new Runnable {
       override def run(): Unit = f
     }
   }
 
-  implicit def toScala[V](future: Future[V]): concurrent.Future[V] = future.toScala
+  implicit def future2Scala[V](future: Future[V]): concurrent.Future[V] = future.toScala
 
   implicit class Future2Scala[V](future: Future[V]) {
     @inline def toScala: concurrent.Future[V] = concurrent.Future(future.get)(concurrent.ExecutionContext.global)
