@@ -18,6 +18,7 @@ package hobby.chenai.nakam.lang
 
 import hobby.chenai.nakam.lang.TypeBring.AsIs
 import java.util
+import java.io.File
 import java.util.concurrent.Future
 import scala.language.implicitConversions
 import scala.ref.WeakReference
@@ -142,10 +143,10 @@ object J2S {
     }
   }
 
-  implicit def future2Scala[V](future: Future[V]): concurrent.Future[V] = future.toScala
+  implicit def future2Scala[V](future: Future[V]): concurrent.Future[V] = concurrent.Future(future.get)(concurrent.ExecutionContext.global)
 
   implicit class Future2Scala[V](future: Future[V]) {
-    @inline def toScala: concurrent.Future[V] = concurrent.Future(future.get)(concurrent.ExecutionContext.global)
+    @inline def toScala: concurrent.Future[V] = future2Scala(future)
   }
 
   /** 顺便做某事。类似`ensuring(cond: => Boolean)`，但不同：cond 会被放进断言，意味着可能不被执行。 */
@@ -162,4 +163,12 @@ object J2S {
   }
 
   def getRef[T <: AnyRef](ref: WeakReference[T]): Option[T] = if (ref.isNull) None else ref.get
+
+  implicit class FileSepJoiner(path: String) {
+    @inline def / : String = path + File.separator
+
+    @inline def /(s: String): String = / + s
+
+    @inline def /(c: Char): String = / + c
+  }
 }
