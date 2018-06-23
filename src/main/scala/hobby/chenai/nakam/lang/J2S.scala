@@ -16,10 +16,11 @@
 
 package hobby.chenai.nakam.lang
 
-import hobby.chenai.nakam.lang.TypeBring.AsIs
 import java.util
 import java.io.File
 import java.util.concurrent.Future
+import hobby.chenai.nakam.lang.TypeBring.AsIs
+
 import scala.language.implicitConversions
 import scala.ref.WeakReference
 
@@ -170,5 +171,17 @@ object J2S {
     @inline def /(s: String): String = / + s
 
     @inline def /(c: Char): String = / + c
+
+    @inline def - : String = path + "-"
+
+    @inline def -(s: String): String = "-" + s
+
+    @inline def -(c: Char): String = "-" + c
+
+    @inline def `.`: String = path + "."
+
+    @inline def `.`(s: String): String = `.` + s
+
+    @inline def `.`(c: Char): String = `.` + c
   }
 }
