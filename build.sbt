@@ -33,7 +33,8 @@ libraryDependencies ++= Seq(
   //  "com.github.dedge-space" % "annoguard" % "1.0.3-beta",
 
   "junit" % "junit" % "[4.12,)" % Test,
-  "org.scalatest" %% "scalatest" % "[2.11,)" % Test
+  // `3.2.0-SNAP10`会导致`scala.ScalaReflectionException: object org.scalatest.prop.Configuration$ not found`.
+  "org.scalatest" %% "scalatest" % "3.2.0-SNAP7" % Test
 )
 
 // 如果项目要独立编译，请同时启用这部分。
