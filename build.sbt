@@ -26,11 +26,14 @@ exportJars := true
 
 offline := true
 
+// 解决生成文档报错导致 jitpack.io 出错的问题。
+publishArtifact in packageDoc := false
+
 // 如果要用 jitpack 打包的话就加上，打完了再注掉。
-//resolvers += "jitpack" at "https://jitpack.io"
-//
+resolvers += "jitpack" at "https://jitpack.io"
+
 libraryDependencies ++= Seq(
-  //  "com.github.dedge-space" % "annoguard" % "1.0.3-beta",
+  "com.github.dedge-space" % "annoguard" % "1.0.3-beta",
 
   "junit" % "junit" % "[4.12,)" % Test,
   // `3.2.0-SNAP10`会导致`scala.ScalaReflectionException: object org.scalatest.prop.Configuration$ not found`.
@@ -39,7 +42,7 @@ libraryDependencies ++= Seq(
 
 // 如果项目要独立编译，请同时启用这部分。
 // Macro Settings
-/*
+
 resolvers += Resolver.sonatypeRepo("releases")
 // scalameta/paradise currently supports scalameta 1.8.0 only, not 2.0.0-M1.
 // (https://stackoverflow.com/questions/45470048/new-style-inline-macros-require-scala-meta)
@@ -53,4 +56,3 @@ scalacOptions += "-Xplugin-require:macroparadise"
 scalacOptions in(Compile, console) ~= (_ filterNot (_ contains "paradise")) // macroparadise plugin doesn't work in repl yet.
 scalacOptions in console in Compile -= "-Xfatal-warnings"
 scalacOptions in console in Test -= "-Xfatal-warnings"
-*/
