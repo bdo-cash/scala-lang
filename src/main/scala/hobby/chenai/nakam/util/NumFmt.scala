@@ -42,8 +42,7 @@ trait NumFmt {
     * @param fmtr            数字格式化器。若传 null 表示输出原始值。
     */
   def formatted(length: Int = -1, fixedFracDigits: Int = -1, round: Boolean = false)
-               (/*implicit 不能和传名参数同时使用，为了性能优化，舍弃隐式转换。*/
-                fmtr: => NumberFormat = formatter): String = {
+               (implicit fmtr: NumberFormat = formatter): String = {
     val s = format(fixedFracDigits, round, fmtr)
     if (length <= 0) s else s formatted s"%${length}s"
   }
@@ -53,13 +52,12 @@ trait NumFmt {
     */
   def original = formatted()(null)
 
-  protected def format(fixedFracDigits: Int, round: Boolean, fmtr: => NumberFormat): String = {
+  protected def format(fixedFracDigits: Int, round: Boolean, fmtr: NumberFormat): String = {
     if (fmtr == null) valueFfd(fixedFracDigits, round)
     else fmtr.format(valueFfd(fixedFracDigits, round))
   } + " " + unitNameFmt
 
-  final def valueFfd(fixedFracDigits: Int, round: Boolean = false): Double =
-    NumFmt.cut2FixedFracDigits(value, fixedFracDigits, round)
+  final def valueFfd(fixedFracDigits: Int, round: Boolean = false): Double = NumFmt.cut2FixedFracDigits(value, fixedFracDigits, round)
 
   protected def value: Double
 
