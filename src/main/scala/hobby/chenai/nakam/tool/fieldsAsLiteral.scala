@@ -101,7 +101,7 @@ class fieldsAsLiteral extends StaticAnnotation {
 
     // println(s"@${classOf[fieldsAsLiteral].getName} gen class:\n---->{${clazz.mods.mkString(" ")} class " +
     //  s"${clazz.name.value}${clazz.tparams.mkString("[", ", ", "]")}${clazz.ctor.paramss.flatten.mkString("(", ", ", ")")}")
-    println(s"---->added newCompanion:\n$newCompanion")
+    println(s"----> @${classOf[fieldsAsLiteral].getSimpleName} added newCompanion:\n$newCompanion")
 
     q"$clazz; $newCompanion"
   }

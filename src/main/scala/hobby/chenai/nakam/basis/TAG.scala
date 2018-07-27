@@ -43,6 +43,9 @@ object TAG {
     override protected val original = tag
 
     override def toString = trim
+
+    lazy val shell = (if (trim.lastIndexOf('@') >= leadWith.length) trim.substring(0, trim.lastIndexOf('@'))
+    else trim).replace(leadWith, "TA").replace(fillWith, "G")
   }
 
   /** 用于在异常信息中增加前缀，以便于在日志中搜索。e.g:
@@ -65,7 +68,11 @@ object TAG {
 
   /** 接入到类后面以便引入 `LogTag`。 */
   trait ClassName {
-    implicit lazy val className: LogTag = LogTag(getClass.getName + "@" + hashCode.toHexString.take(3))
+    implicit lazy val className: LogTag = ClassName(this)
+  }
+
+  object ClassName {
+    def apply(anyRef: AnyRef): LogTag = LogTag(anyRef.getClass.getName + "@" + anyRef.hashCode.toHexString.take(3))
   }
 
   // TODO:  需要通过宏来实现。
