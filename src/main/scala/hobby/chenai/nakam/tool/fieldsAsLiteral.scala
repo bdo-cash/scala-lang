@@ -21,7 +21,7 @@ import scala.annotation.StaticAnnotation
 /**
   * 摘自：https://github.com/lorandszakacs/field-names.<br>
   * 并进行了二次加工：<br>
-  * - 重命名：`FieldNames` -> `fieldsAsLiteral`;
+  * - 重命名：`FieldNames` -> `fieldsAsLiteral`;<br>
   * - 新增；`object clazz.name`和`def toSeq`;<br>
   * - 增加`final`限定，以便在其它注解中可以引用。
   * <P>
