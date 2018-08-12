@@ -180,8 +180,16 @@ object J2S {
 
     @inline def `.`: String = path + "."
 
-    @inline def `.`(s: String): String = `.` + s
+    @inline def `.`(s: String): String = *(s)
 
-    @inline def `.`(c: Char): String = `.` + c
+    @inline def `.`(c: Char): String = *(c)
+
+    @inline def * : String = `.`
+
+    @inline def *(s: String): String = * + s
+
+    @inline def *(c: Char): String = * + c
   }
+
+  implicit def char2String(c: Char): String = String.valueOf(c)
 }
