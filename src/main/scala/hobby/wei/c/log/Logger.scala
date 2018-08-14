@@ -19,13 +19,14 @@ package hobby.wei.c.log
 import java.util.Date
 import hobby.chenai.nakam.basis.TAG._
 import hobby.chenai.nakam.lang.J2S._
-import hobby.chenai.nakam.tool.pool.S
+import hobby.chenai.nakam.tool.pool.{_2S, S}
 import hobby.wei.c.anno.proguard.Burden
 
 /**
   * @author Chenai Nakam(chenai.nakam@gmail.com)
   * @version 1.0, 05/01/2018
   */
+object Logger extends _2S
 class Logger {
   @Burden
   @throws[IllegalArgumentException]

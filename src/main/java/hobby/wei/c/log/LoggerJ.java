@@ -38,7 +38,7 @@ public class LoggerJ {
     }
 
     public static S s(String s) {
-        return S.s(s);
+        return Logger.s(s);
     }
 
     @Burden

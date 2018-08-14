@@ -18,7 +18,8 @@ package hobby.chenai.nakam.tool.pool
 
 /**
   * @author Chenai Nakam(chenai.nakam@gmail.com)
-  * @version 1.0, 05/01/2018
+  * @version 1.0, 05/01/2018;
+  *          1.1, 14/08/2018, 新增`_2S`以便集成。
   */
 class S extends Cap[String] {
   override def equals(o: Any) = o match {
@@ -31,7 +32,7 @@ class S extends Cap[String] {
   override def hashCode = get.fold(0)(_.hashCode)
 }
 
-object S extends Pool[String, S] {
+trait _2S extends Pool[String, S] {
   implicit class _2S(_s: String) {
     @inline def s: S = obtain(_s)
   }
@@ -40,3 +41,5 @@ object S extends Pool[String, S] {
 
   protected override def newCap = new S
 }
+
+object S extends _2S
