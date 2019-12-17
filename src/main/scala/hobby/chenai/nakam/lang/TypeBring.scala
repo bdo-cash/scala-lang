@@ -36,11 +36,11 @@ import scala.language.implicitConversions
 trait TypeBring[L, U >: L, -O] {
   implicit def ^[T >: L <: U](o: O): T = o.as[T]
 
-  def ^#(c: O, u: O)(implicit f: (U, L) => U): U = f(c, u)
+  def combine[T >: L <: U](o1: O, o2: O)(implicit f: (T, T) => T): T = f(o1, o2)
 
   /** 对于子类中本来是 `T` 类型的 `this` 但需要强制确认，或者用 `import x._`
-    * 的方式引入本作用范围，隐式方法 `^(O)` 不会被直接应用（原因不详），
-    * 只有这样显示定义隐式函数才能起作用。 */
+    * 方式引入作用范围的，隐式方法 `^(o)` 不会被直接 apply（原因不详）。
+    * 只有这样显式定义[隐式函数值]才能起作用。 */
   implicit lazy val t2 = ^ _
 }
 
@@ -50,6 +50,11 @@ object TypeBring {
 
     // 大坑：这个永远返回 true。
     // def is[T]: Boolean = a.isInstanceOf[T]
+  }
+
+  implicit class Combine[L, U >: L, -O](o1: O)(implicit tb: TypeBring[L, U, O]) {
+    import tb._
+    def ++[T >: L <: U](o2: O)(implicit f: (T, T) => T): T = f(o1, o2)
   }
 }
 
