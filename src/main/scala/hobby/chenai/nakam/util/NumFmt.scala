@@ -18,9 +18,12 @@ package hobby.chenai.nakam.util
 
 import java.text.{DecimalFormat, NumberFormat}
 
+import scala.math.BigDecimal
+
 /**
   * @author Chenai Nakam(chenai.nakam@gmail.com)
-  * @version 1.0, 16/07/2017
+  * @version 1.0, 16/07/2017;
+  *          2.0, 24/02/2020, 当前版本使用`Double`可能造成精度问题，改成了`BigDecimal(String)`版本。
   */
 trait NumFmt {
   /**
@@ -57,9 +60,15 @@ trait NumFmt {
     else fmtr.format(valueFfd(fixedFracDigits, round))
   } + " " + unitNameFmt
 
-  final def valueFfd(fixedFracDigits: Int, round: Boolean = false): Double = NumFmt.cut2FixedFracDigits(value, fixedFracDigits, round)
+  final def valueFfd(fixedFracDigits: Int, round: Boolean = false): BigDecimal = NumFmt.cut2FixedFracDigits(value, fixedFracDigits, round)
 
-  protected def value: Double
+  /**
+    * 注意：如果是`字面量`的数值，应该先把数值[[toString]]再[[BigDecimal.apply(String)]]，不要直接
+    * 用`Float`或`Double`去`BigDecimal.apply(Float)`, 因为：
+    * The default conversion from Float may not do what you want.
+    * 即会造成精度问题。如：值`1.01f`会格式化后输出`1.009999990463`.
+    */
+  protected def value: BigDecimal
 
   protected def unitNameFmt: String
 
@@ -75,11 +84,11 @@ trait NumFmt {
 }
 
 object NumFmt {
-  final def cut2FixedFracDigits(value: Double, fixedFracDigits: Int, round: Boolean = false): Double = {
+  final def cut2FixedFracDigits(value: BigDecimal, fixedFracDigits: Int, round: Boolean = false): BigDecimal = {
     if (fixedFracDigits < 0) value
     else {
       val r = math.pow(10, fixedFracDigits)
-      (if (round) (value * r).round else (value * r).toLong).toDouble / r
+      (if (round) (value * r).rounded else BigDecimal((value * r).toBigInt)) / r
     }
   }
 }
