@@ -33,7 +33,7 @@ protected trait Retry extends TAG.ClassName {
     * @param delayMillis 延迟多长时间后重试。单位：毫秒。
     * @param times       最多重试多少次。
     * @param increase    延时递增，在`delay`的基础上。
-    * @param from        从什么时间开始递增。
+    * @param from        从第几次开始递增（注意：这个参数和`times`协同，不是从0开始，也就是说默认不递增）。
     * @param action      具体要执行的操作。该函数的参数为`times`，返回`true`表示成功，结束重试。
     * @param delayer     用于延迟`action`执行时间的延迟器。
     */

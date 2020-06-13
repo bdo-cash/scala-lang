@@ -63,8 +63,10 @@ trait NumFmt {
   final def valueFfd(fixedFracDigits: Int, round: Boolean = false): BigDecimal = NumFmt.cut2FixedFracDigits(value, fixedFracDigits, round)
 
   /**
-    * 注意：如果是`字面量`的数值，应该先把数值[[toString]]再[[BigDecimal.apply(String)]]，不要直接
-    * 用`Float`或`Double`去`BigDecimal.apply(Float)`, 因为：
+    * Scala 的[[BigDecimal.apply(Double/Float)]]是安全的，内部会执行[[java.math.BigDecimal(Double.toString(d))]]。
+    * <br>
+    * 注意：如果是`字面量`的数值，应该先把数值[[toString]]再`new BigDecimal(String)`，不要直接
+    * 用`Float`或`Double`去`new BigDecimal(Float)`, 因为：
     * The default conversion from Float may not do what you want.
     * 即会造成精度问题。如：值`1.01f`会格式化后输出`1.009999990463`.
     */
