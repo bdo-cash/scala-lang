@@ -16,7 +16,7 @@
 
 package hobby.chenai.nakam.tool
 
-import scala.annotation.StaticAnnotation
+import scala.annotation.{compileTimeOnly, StaticAnnotation}
 
 /**
   * 摘自：https://github.com/lorandszakacs/field-names.<br>
@@ -48,8 +48,10 @@ import scala.annotation.StaticAnnotation
   * @author Lorand Szakacs, lsz@lorandszakacs.com
   * @since 17 Jul 2017
   * @author Chenai Nakam(chenai.nakam@gmail.com)
-  * @version 1.0, 30/06/2018, 功能增强。
+  * @version 1.0, 30/06/2018, 功能增强；
+  *          1.1, 06/09/2020, 增加`@compileTimeOnly`。
   */
+@compileTimeOnly("enable macro paradis to expand macro annotations")
 class fieldsAsLiteral extends StaticAnnotation {
   // for quasiquotes => q"""sth""". 如果不用`scala.meta`的话，才需要引入这个。否则有冲突。
   // val universe: scala.reflect.runtime.universe.type = scala.reflect.runtime.universe
@@ -62,7 +64,7 @@ class fieldsAsLiteral extends StaticAnnotation {
     val (clazz, companion) = defn match {
       case q"${clazz: Defn.Class}; ${companion: Defn.Object}" => (clazz, companion)
       case clazz: Defn.Class => (clazz, q"object ${Term.Name(clazz.name.value)}")
-      case _ => abort("@FieldNames must annotate a case class or class.")
+      case _ => abort("@fieldsAsLiteral must annotate a `case class` or `class`.")
     }
 
     val paramNames2LiteralStr = clazz.ctor.paramss.flatten.map { p =>
