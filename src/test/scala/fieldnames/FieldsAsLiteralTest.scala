@@ -16,7 +16,7 @@
   */
 package fieldnames
 
-import hobby.chenai.nakam.tool.fieldsAsLiteral
+import hobby.chenai.nakam.tool.macros.fieldsAsLiteral
 import org.scalatest.FunSuite
 import org.scalatest.Matchers._
 

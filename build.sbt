@@ -1,16 +1,17 @@
+
 name := baseDirectory.value.getName
 
 organization := "hobby.chenai.nakam"
 
 version := "0.2.0-SNAPSHOT"
 
-scalaVersion := "2.11.11"
+scalaVersion := "2.11.12"
 
 crossScalaVersions := Seq(
   /*"2.11.7", 多余，不需要两个*/
-  "2.11.11",
+  "2.11.12",
   /*"2.12.2", 有一些编译问题：`the interface is not a direct parent`。*/
-  "2.12.6")
+  "2.12.12")
 
 //libraryProject := true
 
@@ -42,7 +43,15 @@ libraryDependencies ++= Seq(
 
 // 如果项目要独立编译，请同时启用这部分。
 // Macro Settings
+///*
+resolvers += Resolver.sonatypeRepo("releases")
+addCompilerPlugin("org.scalamacros" % "paradise" % "[2.1.0,)" cross CrossVersion.full)
+// https://mvnrepository.com/artifact/org.scala-lang/scala-compiler
+libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value
+//*/
 
+/*
+// 以下已弃用：
 resolvers += Resolver.sonatypeRepo("releases")
 // scalameta/paradise currently supports scalameta 1.8.0 only, not 2.0.0-M1.
 // (https://stackoverflow.com/questions/45470048/new-style-inline-macros-require-scala-meta)
@@ -51,9 +60,9 @@ libraryDependencies ++= Seq(
   "org.scala-lang" % "scala-reflect" % scalaVersion.value
 )
 addCompilerPlugin("org.scalameta" % "paradise" % "[3.0.0-M9,)" cross CrossVersion.full)
-//addCompilerPlugin("org.scalamacros" % "paradise" % "[2.1.0,)" cross CrossVersion.full),
+//addCompilerPlugin("org.scalamacros" % "paradise" % "[2.1.0,)" cross CrossVersion.full)
 scalacOptions += "-Xplugin-require:macroparadise"
 scalacOptions in(Compile, console) ~= (_ filterNot (_ contains "paradise")) // macroparadise plugin doesn't work in repl yet.
 scalacOptions in console in Compile -= "-Xfatal-warnings"
 scalacOptions in console in Test -= "-Xfatal-warnings"
-
+*/
