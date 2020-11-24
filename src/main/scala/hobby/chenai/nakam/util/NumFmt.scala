@@ -26,6 +26,7 @@ import scala.math.BigDecimal
   *          2.0, 24/02/2020, 当前版本使用`Double`可能造成精度问题，改成了`BigDecimal(String)`版本。
   */
 trait NumFmt {
+
   /**
     * 用法示例：
     * {{{
@@ -39,14 +40,15 @@ trait NumFmt {
     * }}}
     *
     * @param length          输出字符串的总长度，若忽略应传 -1。
+    * @param valueAdjustment 在进行格式化时对[[value]]进行校准。通常是由于格式化单位[[unitNameFmt]]的需要所致。
     * @param fixedFracDigits 仅接受的小数位数，是否四舍五入取决于 `round` 参数。注意格式化器通常对小数的处理是四舍五入。
     *                        若忽略应传 -1。
     * @param round           是四舍五入还是截断。
     * @param fmtr            数字格式化器。若传 null 表示输出原始值。
     */
-  def formatted(length: Int = -1, fixedFracDigits: Int = -1, round: Boolean = false)
+  def formatted(length: Int = -1, valueAdjustment: BigDecimal = 1, fixedFracDigits: Int = -1, round: Boolean = false)
                (implicit fmtr: NumberFormat = formatter): String = {
-    val s = format(fixedFracDigits, round, fmtr)
+    val s = format(valueAdjustment, fixedFracDigits, round, fmtr)
     if (length <= 0) s else s formatted s"%${length}s"
   }
 
@@ -55,12 +57,13 @@ trait NumFmt {
     */
   def original = formatted()(null)
 
-  protected def format(fixedFracDigits: Int, round: Boolean, fmtr: NumberFormat): String = {
-    if (fmtr == null) valueFfd(fixedFracDigits, round)
-    else fmtr.format(valueFfd(fixedFracDigits, round))
+  protected def format(valueAdjustment: BigDecimal, fixedFracDigits: Int, round: Boolean, fmtr: NumberFormat): String = {
+    if (fmtr == null) valueFfd(valueAdjustment, fixedFracDigits, round)
+    else fmtr.format(valueFfd(valueAdjustment, fixedFracDigits, round))
   } + " " + unitNameFmt
 
-  final def valueFfd(fixedFracDigits: Int, round: Boolean = false): BigDecimal = NumFmt.cut2FixedFracDigits(value, fixedFracDigits, round)
+  final def valueFfd(valueAdjustment: BigDecimal = 1, fixedFracDigits: Int = -1, round: Boolean = false): BigDecimal =
+    NumFmt.cut2FixedFracDigits(value * valueAdjustment, fixedFracDigits, round)
 
   /**
     * Scala 的[[BigDecimal.apply(Double/Float)]]是安全的，内部会执行[[java.math.BigDecimal(Double.toString(d))]]。
@@ -86,6 +89,7 @@ trait NumFmt {
 }
 
 object NumFmt {
+
   final def cut2FixedFracDigits(value: BigDecimal, fixedFracDigits: Int, round: Boolean = false): BigDecimal = {
     if (fixedFracDigits < 0) value
     else {
