@@ -94,7 +94,9 @@ object NumFmt {
     if (fixedFracDigits < 0) value
     else {
       val r = math.pow(10, fixedFracDigits)
-      (if (round) (value * r).rounded else BigDecimal((value * r).toBigInt)) / r
+      // (if (round) (value * r).rounded else BigDecimal((value * r).toBigInt)) / r
+      val v = (value * r * 10).toBigInt
+      BigDecimal((if (round) v + 5 else v) / 10) / r
     }
   }
 }
