@@ -20,7 +20,7 @@ import java.util
 import java.io.File
 import java.util.concurrent.Future
 import hobby.chenai.nakam.lang.TypeBring.AsIs
-
+import scala.concurrent.ExecutionContext
 import scala.language.implicitConversions
 import scala.ref.WeakReference
 
@@ -144,7 +144,12 @@ object J2S {
     }
   }
 
-  implicit def future2Scala[V](future: Future[V]): concurrent.Future[V] = concurrent.Future(future.get)(concurrent.ExecutionContext.global)
+  def currThreadExecContext: ExecutionContext = new ExecutionContext {
+    override def execute(runnable: Runnable): Unit = runnable.run()
+    override def reportFailure(cause: Throwable): Unit = cause.printStackTrace
+  }
+
+  implicit def future2Scala[V](future: Future[V]): concurrent.Future[V] = concurrent.Future(future.get)(currThreadExecContext)
 
   implicit class Future2Scala[V](future: Future[V]) {
     @inline def toScala: concurrent.Future[V] = future2Scala(future)
