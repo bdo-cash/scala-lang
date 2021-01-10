@@ -3,7 +3,7 @@ name := baseDirectory.value.getName
 
 organization := "hobby.chenai.nakam"
 
-version := "0.2.1"
+version := "0.2.2"
 
 scalaVersion := "2.11.12"
 

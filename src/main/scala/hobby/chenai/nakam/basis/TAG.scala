@@ -45,7 +45,8 @@ object TAG {
     override def toString = trim
 
     lazy val shell = (if (trim.lastIndexOf('@') >= leadWith.length) trim.substring(0, trim.lastIndexOf('@'))
-    else trim).replace(leadWith, "TA").replace(fillWith, "G").replaceAll("""[^\w]+$""", "")
+    else trim).replace(leadWith, "TA").replace(fillWith, "G")
+      .replaceAll("""[^\w]+$""", "").replace("$", "")
   }
 
   /** 用于在异常信息中增加前缀，以便于在日志中搜索。e.g:
