@@ -58,8 +58,10 @@ trait NumFmt {
   def original = formatted()(null)
 
   protected def format(valueAdjustment: BigDecimal, fixedFracDigits: Int, round: Boolean, fmtr: NumberFormat): String = {
-    if (fmtr == null) valueFfd(valueAdjustment, fixedFracDigits, round)
-    else fmtr.format(valueFfd(valueAdjustment, fixedFracDigits, round))
+    val v = valueFfd(valueAdjustment, fixedFracDigits, round)
+    if (v == BigDecimal(0)) "0" // avoid 0E+1
+    else if (fmtr == null) v
+    else fmtr.format(v)
   } + " " + unitNameFmt
 
   final def valueFfd(valueAdjustment: BigDecimal = 1, fixedFracDigits: Int = -1, round: Boolean = false): BigDecimal =
