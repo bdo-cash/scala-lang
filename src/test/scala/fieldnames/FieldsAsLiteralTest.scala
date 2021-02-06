@@ -12,7 +12,6 @@
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
-  *
   */
 package fieldnames
 
@@ -21,21 +20,19 @@ import org.scalatest.FunSuite
 import org.scalatest.Matchers._
 
 /**
-  *
   * @author Lorand Szakacs, lsz@lorandszakacs.com, lorand.szakacs@busymachines.com
   * @since 17 Jul 2017
-  *
   */
 class FieldsAsLiteralTest extends FunSuite {
 
-  test("@FieldNames annotation on case class") {
+  test("@fieldsAsLiteral annotation on case class") {
 
     @fieldsAsLiteral
     case class CaseClass(
-                          id: Int,
-                          name: String,
-                          names: Seq[String]
-                        )
+        id: Int,
+        name: String,
+        names: Seq[String]
+    )
 
     """CaseClass.fields.id""" should compile
     """CaseClass.fields.name""" should compile
@@ -43,14 +40,14 @@ class FieldsAsLiteralTest extends FunSuite {
     """val x: String = CaseClass.fields.names""" should compile
   }
 
-  test("@FieldNames annotation on case class with explicit companion object") {
+  test("@fieldsAsLiteral annotation on case class with explicit companion object") {
 
     @fieldsAsLiteral
     case class CaseClassWC(
-                            id: Int,
-                            name: String,
-                            names: Seq[String]
-                          )
+        id: Int,
+        name: String,
+        names: Seq[String]
+    )
 
     object CaseClassWC {
       val PreExistingField: String = "test"
@@ -65,14 +62,14 @@ class FieldsAsLiteralTest extends FunSuite {
     assert(CaseClassWC.PreExistingField == "test")
   }
 
-  test("@FieldNames annotation on non-case class") {
+  test("@fieldsAsLiteral annotation on non-case class") {
 
     @fieldsAsLiteral
     class SimpleClass(
-                       id: Int,
-                       name: String,
-                       names: Seq[String]
-                     )
+        id: Int,
+        name: String,
+        names: Seq[String]
+    )
 
     """SimpleClass.fields.id""" should compile
     """SimpleClass.fields.name""" should compile
@@ -80,14 +77,14 @@ class FieldsAsLiteralTest extends FunSuite {
     """val x: String = SimpleClass.fields.names""" should compile
   }
 
-  test("@FieldNames annotation on non-case class with private-ctor") {
+  test("@fieldsAsLiteral annotation on non-case class with private-ctor") {
 
     @fieldsAsLiteral
-    class SimpleClassWPrivateCtor private(
-                                           id: Int,
-                                           name: String,
-                                           names: Seq[String]
-                                         )
+    class SimpleClassWPrivateCtor private (
+        id: Int,
+        name: String,
+        names: Seq[String]
+    )
 
     """SimpleClassWPrivateCtor.fields.id""" should compile
     """SimpleClassWPrivateCtor.fields.name""" should compile
@@ -95,27 +92,27 @@ class FieldsAsLiteralTest extends FunSuite {
     """val x: String = SimpleClassWPrivateCtor.fields.names""" should compile
   }
 
-  test("fail compilation w/ @FieldNames annotation on object") {
+  test("fail compilation w/ @fieldsAsLiteral annotation on object") {
     """
       |@FieldNames
       |object Test{}
     """ shouldNot compile
   }
 
-  test("fail compilation w/ @FieldNames annotation on field") {
+  test("fail compilation w/ @fieldsAsLiteral annotation on field") {
     """
       |    class SimpleClassWPrivateCtor private(
-      |      @FieldNames id: Int,
+      |      @fieldsAsLiteral id: Int,
       |      name: String,
       |      names: Seq[String]
       |    )
     """ shouldNot compile
   }
 
-  test("fail compilation w/ @FieldNames annotation on random code block") {
+  test("fail compilation w/ @fieldsAsLiteral annotation on random code block") {
     """
       {
-        @FieldNames println("Hello World")
+        @fieldsAsLiteral println("Hello World")
       }
     """ shouldNot compile
   }

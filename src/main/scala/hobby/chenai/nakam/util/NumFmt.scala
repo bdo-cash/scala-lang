@@ -44,11 +44,13 @@ trait NumFmt {
     * @param fixedFracDigits 仅接受的小数位数，是否四舍五入取决于 `round` 参数。注意格式化器通常对小数的处理是四舍五入。
     *                        若忽略应传 -1。
     * @param round           是四舍五入还是截断。
+    * @param up              四舍五入时总是 +1 (如果小数不为 0)。
     * @param fmtr            数字格式化器。若传 null 表示输出原始值。
     */
-  def formatted(length: Int = -1, valueAdjustment: BigDecimal = 1, fixedFracDigits: Int = -1, round: Boolean = false)
-               (implicit fmtr: NumberFormat = formatter): String = {
-    val s = format(valueAdjustment, fixedFracDigits, round, fmtr)
+  def formatted(length: Int = -1, valueAdjustment: BigDecimal = 1, fixedFracDigits: Int = -1, round: Boolean = false, up: Boolean = false)(implicit
+    fmtr: NumberFormat = formatter
+  ): String = {
+    val s = format(valueAdjustment, fixedFracDigits, round, up, fmtr)
     if (length <= 0) s else s formatted s"%${length}s"
   }
 
@@ -57,15 +59,15 @@ trait NumFmt {
     */
   def original = formatted()(null)
 
-  protected def format(valueAdjustment: BigDecimal, fixedFracDigits: Int, round: Boolean, fmtr: NumberFormat): String = {
-    val v = valueFfd(valueAdjustment, fixedFracDigits, round)
+  protected def format(valueAdjustment: BigDecimal, fixedFracDigits: Int, round: Boolean, up: Boolean, fmtr: NumberFormat): String = {
+    val v = valueFfd(valueAdjustment, fixedFracDigits, round, up)
     if (v == BigDecimal(0)) "0" // avoid 0E+1
     else if (fmtr == null) v
     else fmtr.format(v)
   } + " " + unitNameFmt
 
-  final def valueFfd(valueAdjustment: BigDecimal = 1, fixedFracDigits: Int = -1, round: Boolean = false): BigDecimal =
-    NumFmt.cut2FixedFracDigits(value * valueAdjustment, fixedFracDigits, round)
+  final def valueFfd(valueAdjustment: BigDecimal = 1, fixedFracDigits: Int = -1, round: Boolean = false, up: Boolean = false): BigDecimal =
+    NumFmt.cut2FixedFracDigits(value * valueAdjustment, fixedFracDigits, round, up)
 
   /**
     * Scala 的[[BigDecimal.apply(Double/Float)]]是安全的，内部会执行[[java.math.BigDecimal(Double.toString(d))]]。
@@ -92,13 +94,14 @@ trait NumFmt {
 
 object NumFmt {
 
-  final def cut2FixedFracDigits(value: BigDecimal, fixedFracDigits: Int, round: Boolean = false): BigDecimal = {
+  final def cut2FixedFracDigits(value: BigDecimal, fixedFracDigits: Int, round: Boolean = false, up: Boolean = false): BigDecimal = {
     if (fixedFracDigits < 0) value
     else {
       val r = math.pow(10, fixedFracDigits)
-      // (if (round) (value * r).rounded else BigDecimal((value * r).toBigInt)) / r
-      val v = (value * r * 10).toBigInt
-      BigDecimal((if (round) v + 5 else v) / 10) / r
+      val o = value * r
+      val v = o.toBigInt
+      val a = if (round) if (up) if (v == o) 0 else 10 else 5 else 0
+      BigDecimal((v * 10 + (if (value >= 0) a else -a)) / 10) / r
     }
   }
 }
