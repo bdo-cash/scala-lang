@@ -48,7 +48,7 @@ trait NumFmt {
     * @param fmtr            数字格式化器。若传 null 表示输出原始值。
     */
   def formatted(length: Int = -1, valueAdjustment: BigDecimal = 1, fixedFracDigits: Int = -1, round: Boolean = false, up: Boolean = false)(implicit
-    fmtr: NumberFormat = formatter
+    fmtr: NumberFormat = NumFmt.formatter
   ): String = {
     val s = format(valueAdjustment, fixedFracDigits, round, up, fmtr)
     if (length <= 0) s else s formatted s"%${length}s"
@@ -80,16 +80,6 @@ trait NumFmt {
   protected def value: BigDecimal
 
   protected def unitNameFmt: String
-
-  def getFormatter(group: Int, maxFrac: Int, minFrac: Int) = {
-    val f: DecimalFormat = new DecimalFormat
-    f.setGroupingSize(group)
-    f.setMaximumFractionDigits(maxFrac)
-    f.setMinimumFractionDigits(minFrac)
-    f
-  }
-
-  implicit lazy val formatter: NumberFormat = getFormatter(3, 12, 0)
 }
 
 object NumFmt {
@@ -104,4 +94,25 @@ object NumFmt {
       BigDecimal((v * 10 + (if (value >= 0) a else -a)) / 10) / r
     }
   }
+
+  final def cut2Ffd(value: Double, ffd: Int, round: Boolean = false, up: Boolean = false): Double = {
+    if (ffd < 0) value
+    else {
+      val r = math.pow(10, ffd)
+      val o = value * r
+      val v = o.toLong
+      val a = if (round) if (up) if (v == o) 0 else 10 else 5 else 0
+      ((v * 10 + (if (value >= 0) a else -a)) / 10).toDouble / r
+    }
+  }
+
+  def getFormatter(group: Int, maxFrac: Int, minFrac: Int) = {
+    val f: DecimalFormat = new DecimalFormat
+    f.setGroupingSize(group)
+    f.setMaximumFractionDigits(maxFrac)
+    f.setMinimumFractionDigits(minFrac)
+    f
+  }
+
+  implicit lazy val formatter: NumberFormat = getFormatter(3, 12, 0)
 }
