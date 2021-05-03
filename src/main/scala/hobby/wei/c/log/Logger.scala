@@ -62,10 +62,8 @@ class Logger {
   @Burden
   def v(e: Throwable)(implicit tag: LogTag): Unit = v(e, null)
 
-  @Burden
   def d(s: => String, args: Any*)(implicit tag: LogTag): Unit = d(null.asInstanceOf[Throwable], s, args)
 
-  @Burden
   def d(e: Throwable, s: => String, args: Any*)(implicit tag: LogTag) = {
     val flats = args.flatten$
     checkArgs(flats: _*)
@@ -73,7 +71,6 @@ class Logger {
     recycleArgs(flats: _*)
   }
 
-  @Burden
   def d(e: Throwable)(implicit tag: LogTag): Unit = d(e, null)
 
   @Burden
