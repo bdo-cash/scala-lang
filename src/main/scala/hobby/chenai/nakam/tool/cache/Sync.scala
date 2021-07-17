@@ -38,7 +38,7 @@ trait Sync extends MemFunc {
 
   override protected[cache] def -(key: K): Unit = sync(super.-(key))
 
-  override protected[cache] def :=(m: Map[K, Option[V]]): Unit = sync(super.:=(m))
+  override protected[cache] def :=(): Unit = sync(super.:=())
 
   override protected[cache] def ?(): Unit = sync(super.?())
 }

@@ -21,7 +21,8 @@ import hobby.wei.c.tool.Locker
 
 /**
   * @author Chenai Nakam(chenai.nakam@gmail.com)
-  * @version 1.0, 25/07/2017
+  * @version 1.0, 25/07/2017;
+  *          1.1, 17/07/2021, comment out 'MemStore.Sync'.
   */
 protected trait MemFunc {
   protected type K
@@ -37,7 +38,7 @@ protected trait MemFunc {
 
   protected[cache] def -(key: K): Unit = ???
 
-  protected[cache] def :=(m: Map[K, Option[V]]): Unit = ???
+  protected[cache] def :=(): Unit = ???
 
   protected[cache] def ?(): Unit = ???
 }
@@ -48,6 +49,7 @@ protected[cache] trait DefImpl[KEY, VALUE] extends MemFunc {
   protected type K = KEY
   protected type V = VALUE
 
+  @volatile
   private var map = Map.empty[K, Option[V]]
 
   override protected[cache] lazy val memory: MemStore[K, V] = new MemStore[K, V] {
@@ -58,7 +60,7 @@ protected[cache] trait DefImpl[KEY, VALUE] extends MemFunc {
 
     override def remove(key: K): Unit = self - key
 
-    override def clear(): Unit = self := Map.empty[K, Option[V]]
+    override def clear(): Unit = self := ()
   }
 
   override protected[cache] def <~(key: K) = map.get(key)
@@ -67,7 +69,7 @@ protected[cache] trait DefImpl[KEY, VALUE] extends MemFunc {
 
   override protected[cache] def -(key: K): Unit = map -= key
 
-  override protected[cache] def :=(m: Map[K, Option[V]]): Unit = map = m
+  override protected[cache] def :=(): Unit = map = Map.empty[K, Option[V]]
 }
 
 protected trait MemStore[K, V] {
@@ -88,6 +90,7 @@ protected trait MemStore[K, V] {
   def clear(): Unit = ???
 }
 
+/* 重构后，没必要了：用法有歧义。
 object MemStore {
   trait Sync[K, V] extends MemStore[K, V] {
     implicit lazy val lock: ReentrantLock = new ReentrantLock(true) // 公平锁，让put具有顺序性，以防旧值覆盖新值。
@@ -102,3 +105,4 @@ object MemStore {
     override def clear(): Unit = sync(super.clear())
   }
 }
+*/
