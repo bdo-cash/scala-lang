@@ -95,6 +95,7 @@ object NumFmt {
     }
   }
 
+  @deprecated(message = "需要特别注意：只有在[确定`value*10^ffd`不会溢出]的情况下，才可以使用本方法。否则应使用`BigDecimal`版本。")
   final def cut2Ffd(value: Double, ffd: Int, round: Boolean = false, up: Boolean = false): Double = {
     if (ffd < 0) value
     else {
