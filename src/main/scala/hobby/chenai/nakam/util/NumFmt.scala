@@ -17,7 +17,7 @@
 package hobby.chenai.nakam.util
 
 import java.text.{DecimalFormat, NumberFormat}
-
+import scala.annotation.tailrec
 import scala.math.BigDecimal
 
 /**
@@ -116,4 +116,24 @@ object NumFmt {
   }
 
   implicit lazy val formatter: NumberFormat = getFormatter(3, 12, 0)
+
+  implicit class ImplicitFloatFmt(value: Double) {
+    @tailrec
+    final def drop_0(s: String): String = if ((s.contains(".") && s.endsWith("0")) || s.endsWith(".")) drop_0(s.dropRight(1)) else s
+
+    def fmtTo(fmtStr: String = "%4.2f", align: Boolean = false): String = {
+      val a = fmtStr.format(value)
+      if (align) a
+      else {
+        val s = drop_0(a)
+        val v = drop_0(value.toString)
+        if (s.length < v.length) s else v
+      }
+    }
+
+    def fmtLen(length: Int, align: Boolean = false): String = {
+      val s = value.toString
+      if (length <= 0) s else fmtTo(s"%${length}.${(length - s.indexOf(".")) max 0}f", align)
+    }
+  }
 }
