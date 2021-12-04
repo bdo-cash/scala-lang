@@ -17,8 +17,8 @@
 package hobby.chenai.nakam.lang
 
 import hobby.chenai.nakam.lang.TypeBring.AsIs
-
 import scala.language.implicitConversions
+import scala.reflect.ClassTag
 
 /**
   * 主要用于路径依赖类型的转换。特别针对同时存在参数化类型的情况，仅有
@@ -49,7 +49,9 @@ object TypeBring {
     def as[T]: T = a.asInstanceOf[T]
 
     // 大坑：这个永远返回 true。
-    // def is[T]: Boolean = a.isInstanceOf[T]
+    //def is[T]: Boolean = a.isInstanceOf[T]
+
+    def is[T: ClassTag](implicit tag: ClassTag[T]) = tag.runtimeClass.isAssignableFrom(a.getClass)
   }
 
   implicit class Combine[L, U >: L, -O](o1: O)(implicit tb: TypeBring[L, U, O]) {
