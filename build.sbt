@@ -34,7 +34,7 @@ publishArtifact in packageDoc := false
 resolvers += "jitpack" at "https://jitpack.io"
 
 libraryDependencies ++= Seq(
-  "com.github.dedge-space" % "annoguard" % "v1.0.5-beta",
+  "com.github.bdo-cash" % "annoguard" % "v1.0.5-beta",
 
   "junit" % "junit" % "[4.12,)" % Test,
   // `3.2.0-SNAP10`会导致`scala.ScalaReflectionException: object org.scalatest.prop.Configuration$ not found`.
