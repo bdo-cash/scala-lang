@@ -47,9 +47,7 @@ trait NumFmt {
     * @param up              四舍五入时总是 +1 (如果小数不为 0)。
     * @param fmtr            数字格式化器。若传 null 表示输出原始值。
     */
-  def formatted(length: Int = -1, valueAdjustment: BigDecimal = 1, fixedFracDigits: Int = -1, round: Boolean = false, up: Boolean = false)(implicit
-    fmtr: NumberFormat = NumFmt.formatter
-  ): String = {
+  def formatted(length: Int = -1, valueAdjustment: BigDecimal = 1, fixedFracDigits: Int = -1, round: Boolean = false, up: Boolean = false)(implicit fmtr: NumberFormat = NumFmt.formatter): String = {
     val s = format(valueAdjustment, fixedFracDigits, round, up, fmtr)
     if (length <= 0) s else s formatted s"%${length}s"
   }
@@ -59,12 +57,12 @@ trait NumFmt {
     */
   def original = formatted()(null)
 
-  protected def format(valueAdjustment: BigDecimal, fixedFracDigits: Int, round: Boolean, up: Boolean, fmtr: NumberFormat): String = {
+  protected def format(valueAdjustment: BigDecimal, fixedFracDigits: Int, round: Boolean, up: Boolean, fmtr: NumberFormat): String = NumFmt.drop_0({
     val v = valueFfd(valueAdjustment, fixedFracDigits, round, up)
     if (v == BigDecimal(0)) "0" // avoid 0E+1
-    else if (fmtr == null) v
+    else if (fmtr == null) v.toString
     else fmtr.format(v)
-  } + " " + unitNameFmt
+  }) + " " + unitNameFmt
 
   final def valueFfd(valueAdjustment: BigDecimal = 1, fixedFracDigits: Int = -1, round: Boolean = false, up: Boolean = false): BigDecimal =
     NumFmt.cut2FixedFracDigits(value * valueAdjustment, fixedFracDigits, round, up)
@@ -117,9 +115,10 @@ object NumFmt {
 
   implicit lazy val formatter: NumberFormat = getFormatter(3, 12, 0)
 
+  @tailrec
+  final def drop_0(s: String): String = if (s.endsWith(".") || (s.endsWith("0") && s.contains("."))) drop_0(s.dropRight(1)) else s
+
   implicit class ImplicitFloatFmt(value: Double) {
-    @tailrec
-    final def drop_0(s: String): String = if ((s.contains(".") && s.endsWith("0")) || s.endsWith(".")) drop_0(s.dropRight(1)) else s
 
     def fmtTo(fmtStr: String = "%4.2f", align: Boolean = false): String = {
       val a = fmtStr.format(value)
