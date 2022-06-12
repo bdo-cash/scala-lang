@@ -24,4 +24,6 @@ package object macros {
   import scala.language.experimental.macros
 
   def valName: String = macro impl.valName
+  def defName: String = macro impl.defName
+  def valOrDefName: String = macro impl.valOrDefName
 }
