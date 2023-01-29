@@ -117,5 +117,5 @@ trait RuledSeq[E] extends Ruled[Seq[E]] with TypeBring[Seq[E], Seq[E], Seq[_]] {
     case _ => false
   }
 
-  override def canEqual(that: Any) = that.isInstanceOf[RuledSeq[E]]
+  override def canEqual(that: Any) = that.isInstanceOf[RuledSeq[_]]
 }

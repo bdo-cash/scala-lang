@@ -114,7 +114,8 @@ private[macros] object impl {
         q"$mods object $tname extends { ..$earlydefns } with ..$parents { $self => ..${body :+ clazzObject :+ fieldsObject} }"
       case _ => throw new MacroIllegalStateException(s"object `${companion.symbol.name.decodedName.toString}` not defined correctly? $companion")
     }
-    println(s"---> macros.@${classOf[fieldsAsLiteral].getSimpleName} ${if (compDefined) "INSERT TREEs into" else "GEN"} COMPANION:\n$newCompanion")
+    // "macros.@${classOf[fieldsAsLiteral].getSimpleName}" // 报错符合`@compileTimeOnly`的定义
+    println(s"---> macros.@fieldsAsLiteral ${if (compDefined) "INSERT TREEs into" else "GEN"} COMPANION:\n$newCompanion")
 
     c.Expr(q"$clazz; $newCompanion")
   }
@@ -167,6 +168,5 @@ object keyImpl {
     else (None, enclosingDef(lis))
   }
 
-  def enclosingTrees(c: whitebox.Context): List[c.Tree] =
-    c.asInstanceOf[reflect.macros.runtime.Context].callsiteTyper.context.enclosingContextChain.map(_.tree.asInstanceOf[c.Tree])
+  def enclosingTrees(c: whitebox.Context): List[c.Tree] = c.enclosingImplicits.map(_.tree)
 }

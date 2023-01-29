@@ -16,11 +16,12 @@
 
 package hobby.chenai.nakam.lang
 
-import java.util
-import java.io.File
-import java.util.concurrent.Future
 import hobby.chenai.nakam.lang.TypeBring.AsIs
+import java.io.File
+import java.util
+import java.util.concurrent.Future
 import scala.concurrent.ExecutionContext
+import scala.jdk.CollectionConverters.IteratorHasAsScala
 import scala.language.implicitConversions
 import scala.ref.WeakReference
 
@@ -44,7 +45,7 @@ object J2S {
     /**
       * 区别于 SDK 的 `seq.flatten` 方法，本方法可以把任意 `高阶列表和对象的混合列表` 平坦化。
       */
-    @inline def flatten$: Seq[_] = J2S.flatten$$(seq).reverse
+    @inline def flatten$ : Seq[_] = J2S.flatten$$(seq).reverse
   }
 
   // 4 Java
@@ -53,11 +54,11 @@ object J2S {
   private def flatten$$(seq: Seq[_]): List[_] = (List.empty[Any] /: seq) {
     (list: List[_], any: Any) =>
       any match {
-        case as: Seq[_] => flatten$$(as) ::: list
+        case as: Seq[_]   => flatten$$(as) ::: list
         case ar: Array[_] => flatten$$(ar) ::: list
-        case nf: NonFlat => nf.seq :: list // 注意这里是俩冒号，上面是三冒号。
+        case nf: NonFlat  => nf.seq :: list // 注意这里是俩冒号，上面是三冒号。
         case nf: NonFlat$ => nf.arr :: list
-        case _ => any :: list
+        case _            => any :: list
       }
   }
 
@@ -95,6 +96,7 @@ object J2S {
   }
 
   implicit class WrapEnumeration[A](e: util.Enumeration[A]) {
+
     def toSeq: Seq[A] = {
       var list: List[A] = Nil
       while (e.hasMoreElements) list ::= e.nextElement()
@@ -103,7 +105,7 @@ object J2S {
   }
 
   implicit class WrapIterator[A](e: util.Iterator[A]) {
-    def toSeq: Seq[A] = scala.collection.convert.WrapAsScala.asScalaIterator(e).toSeq
+    def toSeq: Seq[A] = e.asScala.toSeq
 
     /*{
       var list: List[A] = Nil
@@ -113,6 +115,7 @@ object J2S {
   }
 
   implicit class Ifable[A](any: A) {
+
     /**
       * 对某值 `any` 的系列条件判断可以集中用这个函数表示，避免写一堆 `if...else...`。
       *
@@ -138,15 +141,16 @@ object J2S {
 
   /** 注意返回类型是`Any`，否则会出现对于最后一句是java调用返回void, 却编译不过的情况。 */
   implicit class Run(f: => Any) {
+
     // runnable(f) 不要去这样调用，会导致求值。
-    @inline def run$: Runnable = new Runnable {
+    @inline def run$ : Runnable = new Runnable {
       override def run(): Unit = f
     }
   }
 
   def currThreadExecContext: ExecutionContext = new ExecutionContext {
-    override def execute(runnable: Runnable): Unit = runnable.run()
-    override def reportFailure(cause: Throwable): Unit = cause.printStackTrace
+    override def execute(runnable: Runnable): Unit     = runnable.run()
+    override def reportFailure(cause: Throwable): Unit = cause.printStackTrace()
   }
 
   implicit def future2Scala[V](future: Future[V]): concurrent.Future[V] = concurrent.Future(future.get)(currThreadExecContext)
@@ -157,6 +161,7 @@ object J2S {
 
   /** 顺便做某事。类似`ensuring(cond: => Boolean)`，但不同：cond 会被放进断言，意味着可能不被执行。 */
   implicit class Obiter(cond: Boolean) {
+
     def obiter(codes: => Unit): Boolean = {
       if (cond) codes
       cond
@@ -183,7 +188,7 @@ object J2S {
 
     @inline def -(c: Char): String = "-" + c
 
-    @inline def `.`: String = path + "."
+    @inline def `.` : String = path + "."
 
     @inline def `.`(s: String): String = *(s)
 
