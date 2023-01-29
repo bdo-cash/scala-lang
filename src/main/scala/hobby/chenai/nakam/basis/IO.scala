@@ -24,56 +24,64 @@ import hobby.chenai.nakam.lang.J2S.NonNull
   * @version 1.0, 28/09/2017
   */
 object IO {
+
   implicit class Close$(io: AutoCloseable) {
+
     def close$(): Unit = io match {
-      case in: InputStream => in.close$()
+      case in: InputStream   => in.close$()
       case out: OutputStream => out.close$()
-      case _ => if (io.nonNull) try {
-        io.close()
-      } catch {
-        case _: IOException => Unit
-      }
+      case _ => if (io.nonNull)
+          try {
+            io.close()
+          } catch {
+            case _: IOException =>
+          }
     }
   }
 
   implicit class CloseIn(in: InputStream) {
+
     def close$(): Unit = {
-      if (in.nonNull) try {
-        in.close()
-      } catch {
-        case _: IOException => Unit
-      }
+      if (in.nonNull)
+        try {
+          in.close()
+        } catch {
+          case _: IOException =>
+        }
     }
   }
 
   implicit class CloseOut(out: OutputStream) {
+
     def close$(): Unit = {
       flush$.sync$
-      if (out.nonNull) try {
-        out.close()
-      } catch {
-        case _: IOException => Unit
-      }
+      if (out.nonNull)
+        try {
+          out.close()
+        } catch {
+          case _: IOException =>
+        }
     }
 
-    def flush$: CloseOut = {
-      if (out.nonNull) try {
-        out.flush()
-      } catch {
-        case _: IOException => Unit
-      }
+    def flush$ : CloseOut = {
+      if (out.nonNull)
+        try {
+          out.flush()
+        } catch {
+          case _: IOException =>
+        }
       this
     }
 
-    def sync$: CloseOut = {
+    def sync$ : CloseOut = {
       if (out.nonNull) out match {
         case fo: FileOutputStream =>
           try {
             fo.getFD.sync()
           } catch {
-            case _: SyncFailedException => Unit
+            case _: SyncFailedException =>
           }
-        case _ => Unit
+        case _ =>
       }
       this
     }

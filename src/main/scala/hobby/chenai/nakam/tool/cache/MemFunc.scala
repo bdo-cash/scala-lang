@@ -60,7 +60,7 @@ protected[cache] trait DefImpl[KEY, VALUE] extends MemFunc {
 
     override def remove(key: K): Unit = self - key
 
-    override def clear(): Unit = self := ()
+    override def clear(): Unit = self.:=()
   }
 
   override protected[cache] def <~(key: K) = map.get(key)

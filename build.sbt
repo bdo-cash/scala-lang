@@ -1,17 +1,16 @@
-
 name := baseDirectory.value.getName
 
 organization := "hobby.chenai.nakam"
 
 version := "1.0.0"
 
-scalaVersion := "2.11.12"
+scalaVersion := "2.12.17"
 
 crossScalaVersions := Seq(
-  /*"2.11.7", 多余，不需要两个*/
   "2.11.12",
-  /*"2.12.2", 有一些编译问题：`the interface is not a direct parent`。*/
-  "2.12.12")
+  "2.12.17",
+  "2.13.10"
+)
 
 //libraryProject := true
 
@@ -34,20 +33,28 @@ publishArtifact in packageDoc := false
 resolvers += "jitpack" at "https://jitpack.io"
 
 libraryDependencies ++= Seq(
-  "com.github.bdo-cash" % "annoguard" % "v1.0.5-beta",
-
-  "junit" % "junit" % "[4.12,)" % Test,
-  // `3.2.0-SNAP10`会导致`scala.ScalaReflectionException: object org.scalatest.prop.Configuration$ not found`.
-  "org.scalatest" %% "scalatest" % "3.2.0-SNAP7" % Test
+  "com.github.bdo-cash" % "annoguard" % "v1.0.6",
+  "junit"               % "junit"     % "[4.12,)"        % Test,
+  "org.scalatest"      %% "scalatest" % "[3.2.0-SNAP7,)" % Test
 )
 
 // 如果项目要独立编译，请同时启用这部分。
 // Macro Settings
 ///*
 resolvers += Resolver.sonatypeRepo("releases")
-addCompilerPlugin("org.scalamacros" % "paradise" % "[2.1.0,)" cross CrossVersion.full)
-// https://mvnrepository.com/artifact/org.scala-lang/scala-compiler
-libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value
+libraryDependencies ++= (CrossVersion.partialVersion(scalaVersion.value) match {
+  case Some((2, x)) if x < 13 =>
+    addCompilerPlugin("org.scalamacros" % "paradise"       % "[2.1.0,)" cross CrossVersion.full)
+    Seq("org.scala-lang"                % "scala-compiler" % scalaVersion.value)
+  case _ => Seq(
+      "org.scala-lang" % "scala-reflect" % scalaVersion.value
+//      "org.scala-lang.modules" %% "scala-collection-compat" % "[2.1.6,)"
+    )
+})
+scalacOptions in Compile ++= (CrossVersion.partialVersion(scalaVersion.value) match {
+  case Some((2, x)) if x >= 13 => Seq("-Ymacro-annotations")
+  case _                       => Nil
+})
 //*/
 
 /*
@@ -65,4 +72,4 @@ scalacOptions += "-Xplugin-require:macroparadise"
 scalacOptions in(Compile, console) ~= (_ filterNot (_ contains "paradise")) // macroparadise plugin doesn't work in repl yet.
 scalacOptions in console in Compile -= "-Xfatal-warnings"
 scalacOptions in console in Test -= "-Xfatal-warnings"
-*/
+ */
