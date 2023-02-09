@@ -26,7 +26,7 @@ import scala.reflect.macros.whitebox
   * @author Chenai Nakam(chenai.nakam@gmail.com)
   * @version 1.0, 09/09/2020
   */
-private[macros] object impl {
+object impl {
 
   def valName(c: whitebox.Context): c.Expr[String] = {
     import c.universe._
