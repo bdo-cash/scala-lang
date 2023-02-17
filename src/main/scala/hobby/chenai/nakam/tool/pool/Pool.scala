@@ -28,6 +28,7 @@ trait Pool[T, C <: Cap[T]] {
   private val sPoolSync = new ReentrantLock
   protected val maxPoolSize = 50
 
+  @volatile
   private var sPool: C = _
   private var sPoolSize = 0
 
