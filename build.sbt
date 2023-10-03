@@ -2,13 +2,13 @@ name := baseDirectory.value.getName
 
 organization := "hobby.chenai.nakam"
 
-version := "1.0.0"
+version := "2.0.1"
 
-scalaVersion := "2.12.17"
+scalaVersion := "2.12.18"
 
 crossScalaVersions := Seq(
   "2.11.12",
-  "2.12.17",
+  "2.12.18",
   "2.13.10"
 )
 
@@ -33,7 +33,7 @@ publishArtifact in packageDoc := false
 resolvers += "jitpack" at "https://jitpack.io"
 
 libraryDependencies ++= Seq(
-  "com.github.bdo-cash" % "annoguard" % "v1.0.6",
+  "com.github.bdo-cash" % "annoguard" % "v1.0.7",
   "junit"               % "junit"     % "[4.12,)"        % Test,
   "org.scalatest"      %% "scalatest" % "[3.2.0-SNAP7,)" % Test
 )
