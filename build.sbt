@@ -2,7 +2,7 @@ name := baseDirectory.value.getName
 
 organization := "hobby.chenai.nakam"
 
-version := "2.0.1"
+version := "2.0.2"
 
 scalaVersion := "2.12.18"
 
@@ -27,13 +27,13 @@ exportJars := true
 offline := true
 
 // 解决生成文档报错导致 jitpack.io 出错的问题。
-publishArtifact in packageDoc := false
+packageDoc / publishArtifact := false
 
 // 如果要用 jitpack 打包的话就加上，打完了再注掉。
 resolvers += "jitpack" at "https://jitpack.io"
 
 libraryDependencies ++= Seq(
-  "com.github.bdo-cash" % "annoguard" % "v1.0.7",
+  "com.github.bdo-cash" % "annoguard" % "v2.0.0",
   "junit"               % "junit"     % "[4.12,)"        % Test,
   "org.scalatest"      %% "scalatest" % "[3.2.0-SNAP7,)" % Test
 )
@@ -41,7 +41,7 @@ libraryDependencies ++= Seq(
 // 如果项目要独立编译，请同时启用这部分。
 // Macro Settings
 ///*
-resolvers += Resolver.sonatypeRepo("releases")
+resolvers ++= Resolver.sonatypeOssRepos("releases")
 libraryDependencies ++= (CrossVersion.partialVersion(scalaVersion.value) match {
   case Some((2, x)) if x < 13 =>
     addCompilerPlugin("org.scalamacros" % "paradise"       % "[2.1.0,)" cross CrossVersion.full)
@@ -51,7 +51,7 @@ libraryDependencies ++= (CrossVersion.partialVersion(scalaVersion.value) match {
 //      "org.scala-lang.modules" %% "scala-collection-compat" % "[2.1.6,)"
     )
 })
-scalacOptions in Compile ++= (CrossVersion.partialVersion(scalaVersion.value) match {
+Compile / scalacOptions ++= (CrossVersion.partialVersion(scalaVersion.value) match {
   case Some((2, x)) if x >= 13 => Seq("-Ymacro-annotations")
   case _                       => Nil
 })
